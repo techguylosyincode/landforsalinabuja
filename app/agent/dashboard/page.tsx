@@ -33,11 +33,15 @@ export default function AgentDashboard() {
             }
             setUser(user);
 
+            console.log("Dashboard User:", user);
             const { data, error } = await supabase
                 .from('properties')
                 .select('*')
                 .eq('agent_id', user.id)
                 .order('created_at', { ascending: false });
+
+            console.log("Dashboard Listings Data:", data);
+            console.log("Dashboard Listings Error:", error);
 
             if (data) {
                 setListings(data);

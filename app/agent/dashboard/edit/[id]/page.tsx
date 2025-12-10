@@ -36,6 +36,8 @@ export default function EditListingPage() {
         is_featured: false
     });
 
+    const [isPremium, setIsPremium] = useState(false);
+
     useEffect(() => {
         const fetchListing = async () => {
             const supabase = createClient();
@@ -45,6 +47,15 @@ export default function EditListingPage() {
                 router.push("/login");
                 return;
             }
+
+            // Check subscription tier
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('subscription_tier')
+                .eq('id', user.id)
+                .single();
+
+            if (profile?.subscription_tier === 'premium') setIsPremium(true);
 
             const { data, error } = await supabase
                 .from('properties')
@@ -150,7 +161,7 @@ export default function EditListingPage() {
                     meta_title: formData.meta_title || formData.title,
                     meta_description: formData.meta_description || formData.description.substring(0, 150),
                     focus_keyword: formData.focus_keyword,
-                    is_featured: formData.is_featured
+                    is_featured: isPremium ? formData.is_featured : false // Only allow if premium
                 })
                 .eq('id', id);
 
@@ -204,18 +215,32 @@ export default function EditListingPage() {
                                 />
                             </div>
 
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    id="is_featured"
-                                    name="is_featured"
-                                    checked={formData.is_featured}
-                                    onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                />
-                                <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
-                                    Pin this listing (Featured)
-                                </label>
+                            <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg border">
+                                {isPremium ? (
+                                    <>
+                                        <input
+                                            type="checkbox"
+                                            id="is_featured"
+                                            name="is_featured"
+                                            checked={formData.is_featured}
+                                            onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+                                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                        />
+                                        <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
+                                            Pin this listing (Featured)
+                                        </label>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center justify-between w-full">
+                                        <div className="flex items-center text-gray-400">
+                                            <input type="checkbox" disabled className="h-4 w-4 mr-2" />
+                                            <span className="text-sm">Pin this listing (Premium only)</span>
+                                        </div>
+                                        <Link href="/pricing" className="text-xs text-primary font-bold hover:underline">
+                                            Upgrade to Unlock
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
 
                             <div>

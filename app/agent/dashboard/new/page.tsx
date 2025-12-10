@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { ArrowLeft, Upload, AlertCircle, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
 export default function AddListingPage() {
@@ -14,7 +14,20 @@ export default function AddListingPage() {
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isPremium, setIsPremium] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        const checkPremium = async () => {
+            const supabase = createClient();
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                const { data } = await supabase.from('profiles').select('subscription_tier').eq('id', user.id).single();
+                if (data?.subscription_tier === 'premium') setIsPremium(true);
+            }
+        };
+        checkPremium();
+    }, []);
 
     const [formData, setFormData] = useState({
         title: "",
@@ -58,6 +71,7 @@ export default function AddListingPage() {
                 .from('property-images')
                 .getPublicUrl(filePath);
 
+            console.log("Uploaded Image Public URL:", publicUrl);
             setFormData(prev => ({ ...prev, image_url: publicUrl }));
         } catch (err: any) {
             console.error("Upload error:", err);
@@ -75,7 +89,7 @@ export default function AddListingPage() {
         try {
             const supabase = createClient();
 
-            // Get current user
+            // Get current user and profile
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
@@ -83,6 +97,15 @@ export default function AddListingPage() {
                 setTimeout(() => router.push("/login"), 2000);
                 return;
             }
+
+            // Check subscription tier
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('subscription_tier')
+                .eq('id', user.id)
+                .single();
+
+            const isPremium = profile?.subscription_tier === 'premium';
 
             // Process features
             const featuresArray = formData.features.split(',').map(f => f.trim()).filter(f => f !== "");
@@ -104,7 +127,7 @@ export default function AddListingPage() {
                 meta_title: formData.meta_title || formData.title,
                 meta_description: formData.meta_description || formData.description.substring(0, 150),
                 focus_keyword: formData.focus_keyword,
-                is_featured: formData.is_featured
+                is_featured: isPremium ? formData.is_featured : false // Only allow if premium
             });
 
             if (insertError) {
@@ -155,18 +178,32 @@ export default function AddListingPage() {
                                 />
                             </div>
 
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    id="is_featured"
-                                    name="is_featured"
-                                    checked={formData.is_featured}
-                                    onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                />
-                                <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
-                                    Pin this listing (Featured)
-                                </label>
+                            <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg border">
+                                {isPremium ? (
+                                    <>
+                                        <input
+                                            type="checkbox"
+                                            id="is_featured"
+                                            name="is_featured"
+                                            checked={formData.is_featured}
+                                            onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+                                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                        />
+                                        <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
+                                            Pin this listing (Featured)
+                                        </label>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center justify-between w-full">
+                                        <div className="flex items-center text-gray-400">
+                                            <input type="checkbox" disabled className="h-4 w-4 mr-2" />
+                                            <span className="text-sm">Pin this listing (Premium only)</span>
+                                        </div>
+                                        <Link href="/pricing" className="text-xs text-primary font-bold hover:underline">
+                                            Upgrade to Unlock
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -267,6 +304,7 @@ export default function AddListingPage() {
                                             alt="Property preview"
                                             fill
                                             className="object-cover"
+                                            onError={(e) => console.error("Image load error:", e)}
                                         />
                                         <button
                                             type="button"
@@ -280,12 +318,12 @@ export default function AddListingPage() {
                                     <div className="flex flex-col items-center">
                                         <Upload className="h-12 w-12 text-gray-400 mb-4" />
                                         <p className="text-sm text-gray-600 mb-2">Click to upload or drag and drop</p>
-                                        <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (max. 5MB)</p>
+                                        <p className="text-xs text-gray-500">SVG, PNG, JPG, GIF or WebP (max. 5MB)</p>
                                         <input
                                             type="file"
                                             ref={fileInputRef}
                                             className="hidden"
-                                            accept="image/*"
+                                            accept="image/png, image/jpeg, image/gif, image/svg+xml, image/webp"
                                             onChange={handleImageUpload}
                                         />
                                         <Button
