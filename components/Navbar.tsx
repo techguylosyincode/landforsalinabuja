@@ -8,17 +8,41 @@ import { User } from '@supabase/supabase-js';
 
 export default function Navbar() {
     const [user, setUser] = useState<User | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const supabase = createClient();
         const getUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);
+
+            if (user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', user.id)
+                    .single();
+                if (profile?.role === 'admin') {
+                    setIsAdmin(true);
+                }
+            }
         };
         getUser();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
             setUser(session?.user ?? null);
+            if (session?.user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', session.user.id)
+                    .single();
+                if (profile?.role === 'admin') {
+                    setIsAdmin(true);
+                }
+            } else {
+                setIsAdmin(false);
+            }
         });
 
         return () => subscription.unsubscribe();
@@ -44,6 +68,11 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-4">
+                    {isAdmin && (
+                        <Link href="/admin" className="text-sm font-bold text-red-600 hover:text-red-700 hidden sm:block">
+                            Admin Panel
+                        </Link>
+                    )}
                     {user ? (
                         <Link href="/agent/dashboard" className="text-sm font-medium hover:text-primary hidden sm:block">
                             Dashboard

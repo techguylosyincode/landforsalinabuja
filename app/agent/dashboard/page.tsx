@@ -1,11 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { PlusCircle, BarChart3, List, Trash2, Edit } from "lucide-react";
+import { PlusCircle, BarChart3, List, Trash2, Edit, Zap } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const BoostButton = dynamic(() => import("@/components/BoostButton"), { ssr: false });
 
 type Property = {
     id: string;
@@ -14,6 +17,8 @@ type Property = {
     district: string;
     status: string;
     created_at: string;
+    is_featured?: boolean;
+    featured_until?: string;
 };
 
 export default function AgentDashboard() {
@@ -23,33 +28,58 @@ export default function AgentDashboard() {
     const router = useRouter();
 
     useEffect(() => {
+        let isMounted = true;
+
         const fetchData = async () => {
-            const supabase = createClient();
-            const { data: { user } } = await supabase.auth.getUser();
+            console.log("Dashboard: Starting fetch...");
+            try {
+                const supabase = createClient();
+                const { data: { user } } = await supabase.auth.getUser();
+                console.log("Dashboard: User found:", user?.id);
 
-            if (!user) {
-                router.push('/login');
-                return;
+                if (!user) {
+                    console.log("Dashboard: No user, redirecting...");
+                    router.push('/login');
+                    return;
+                }
+
+                if (isMounted) setUser(user);
+
+                const { data, error } = await supabase
+                    .from('properties')
+                    .select('id, title, price, district, status, created_at, is_featured, featured_until')
+                    .eq('agent_id', user.id)
+                    .order('created_at', { ascending: false });
+
+                console.log("Dashboard: Properties fetched:", data?.length);
+
+                if (error) throw error;
+
+                if (isMounted && data) {
+                    setListings(data);
+                }
+            } catch (e) {
+                console.error("Error loading dashboard:", e);
+            } finally {
+                console.log("Dashboard: Finally block reached");
+                if (isMounted) setLoading(false);
             }
-            setUser(user);
-
-            console.log("Dashboard User:", user);
-            const { data, error } = await supabase
-                .from('properties')
-                .select('*')
-                .eq('agent_id', user.id)
-                .order('created_at', { ascending: false });
-
-            console.log("Dashboard Listings Data:", data);
-            console.log("Dashboard Listings Error:", error);
-
-            if (data) {
-                setListings(data);
-            }
-            setLoading(false);
         };
 
         fetchData();
+
+        // Failsafe: Force stop loading after 5 seconds
+        const timer = setTimeout(() => {
+            if (isMounted && loading) {
+                console.warn("Dashboard: Force stopping loading after timeout");
+                setLoading(false);
+            }
+        }, 5000);
+
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+        };
     }, [router]);
 
     if (loading) return <div className="min-h-screen pt-20 text-center">Loading dashboard...</div>;
@@ -123,28 +153,55 @@ export default function AgentDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y">
-                                    {listings.map((listing) => (
-                                        <tr key={listing.id} className="hover:bg-gray-50">
-                                            <td className="p-4 font-medium">{listing.title}</td>
-                                            <td className="p-4">₦{listing.price.toLocaleString()}</td>
-                                            <td className="p-4">{listing.district}</td>
-                                            <td className="p-4">
-                                                <span className={`px-2 py-1 rounded-full text-xs ${listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
-                                                    {listing.status}
-                                                </span>
-                                            </td>
-                                            <td className="p-4 flex gap-2">
-                                                <Button size="sm" variant="outline" className="h-8 w-8 p-0" asChild>
-                                                    <Link href={`/agent/dashboard/edit/${listing.id}`}>
-                                                        <Edit className="h-4 w-4" />
-                                                    </Link>
-                                                </Button>
-                                                <Button size="sm" variant="outline" className="h-8 w-8 p-0 text-red-500 hover:text-red-700">
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {listings.map((listing) => {
+                                        const isFeaturedActive = listing.is_featured && listing.featured_until && new Date(listing.featured_until) > new Date();
+                                        return (
+                                            <tr key={listing.id} className="hover:bg-gray-50">
+                                                <td className="p-4">
+                                                    <div className="font-medium">{listing.title}</div>
+                                                    {isFeaturedActive && (
+                                                        <span className="inline-flex items-center gap-1 text-xs text-yellow-600 mt-1">
+                                                            <Zap className="h-3 w-3" /> Featured
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="p-4">₦{listing.price.toLocaleString()}</td>
+                                                <td className="p-4">{listing.district}</td>
+                                                <td className="p-4">
+                                                    <span className={`px-2 py-1 rounded-full text-xs ${listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                                                        {listing.status}
+                                                    </span>
+                                                </td>
+                                                <td className="p-4">
+                                                    <div className="flex gap-2">
+                                                        <Button size="sm" variant="outline" className="h-8 w-8 p-0" asChild>
+                                                            <Link href={`/agent/dashboard/edit/${listing.id}`}>
+                                                                <Edit className="h-4 w-4" />
+                                                            </Link>
+                                                        </Button>
+                                                        {!isFeaturedActive && user?.email && (
+                                                            <BoostButton
+                                                                propertyId={listing.id}
+                                                                propertyTitle={listing.title}
+                                                                userEmail={user.email}
+                                                                onSuccess={() => {
+                                                                    // Refresh listings
+                                                                    setListings(prev => prev.map(l =>
+                                                                        l.id === listing.id
+                                                                            ? { ...l, is_featured: true, featured_until: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString() }
+                                                                            : l
+                                                                    ));
+                                                                }}
+                                                            />
+                                                        )}
+                                                        <Button size="sm" variant="outline" className="h-8 w-8 p-0 text-red-500 hover:text-red-700">
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>

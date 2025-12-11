@@ -17,36 +17,58 @@ export default function AddListingPage() {
     const [isPremium, setIsPremium] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // Dropdown Data
+    const [locations, setLocations] = useState<{ id: string, name: string }[]>([]);
+    const [landTypes, setLandTypes] = useState<{ id: string, name: string }[]>([]);
+    const [estates, setEstates] = useState<{ id: string, name: string }[]>([]);
+
     useEffect(() => {
-        const checkPremium = async () => {
+        const fetchData = async () => {
             const supabase = createClient();
+
+            // Fetch User & Premium Status
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 const { data } = await supabase.from('profiles').select('subscription_tier').eq('id', user.id).single();
-                if (data?.subscription_tier === 'premium') setIsPremium(true);
+                if (data?.subscription_tier === 'premium' || data?.subscription_tier === 'pro' || data?.subscription_tier === 'agency') setIsPremium(true);
             }
+
+            // Fetch Dropdowns
+            const { data: locs } = await supabase.from('locations').select('id, name').order('name');
+            const { data: types } = await supabase.from('land_types').select('id, name').order('name');
+            const { data: ests } = await supabase.from('estates').select('id, name').order('name');
+
+            if (locs) setLocations(locs);
+            if (types) setLandTypes(types);
+            if (ests) setEstates(ests);
         };
-        checkPremium();
+        fetchData();
     }, []);
 
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
         price: "",
-        district: "",
+        location_id: "",
+        land_type_id: "",
+        estate_id: "",
         address: "",
         size: "",
         title_type: "C_of_O",
         image_url: "",
         features: "", // Comma separated
-        meta_title: "",
-        meta_description: "",
-        focus_keyword: "",
-        is_featured: false
+        is_featured: false,
+        is_distressed: false,
+        has_foundation: false
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value, type } = e.target;
+        // Handle checkboxes
+        if (type === 'checkbox') {
+            const checked = (e.target as HTMLInputElement).checked;
+            setFormData({ ...formData, [name]: checked });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +93,6 @@ export default function AddListingPage() {
                 .from('property-images')
                 .getPublicUrl(filePath);
 
-            console.log("Uploaded Image Public URL:", publicUrl);
             setFormData(prev => ({ ...prev, image_url: publicUrl }));
         } catch (err: any) {
             console.error("Upload error:", err);
@@ -88,58 +109,105 @@ export default function AddListingPage() {
 
         try {
             const supabase = createClient();
-
-            // Get current user and profile
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
                 setError("You must be logged in to post a property.");
-                setTimeout(() => router.push("/login"), 2000);
                 return;
             }
 
-            // Check subscription tier
-            const { data: profile } = await supabase
-                .from('profiles')
-                .select('subscription_tier')
-                .eq('id', user.id)
-                .single();
+            // 1. Check Limits & Set Status
+            const { data: profile } = await supabase.from('profiles').select('subscription_tier').eq('id', user.id).single();
+            const tier = profile?.subscription_tier || 'starter';
 
-            const isPremium = profile?.subscription_tier === 'premium';
+            // Define listing limits per tier
+            const LISTING_LIMITS: Record<string, number> = {
+                'starter': 1,
+                'free': 1,
+                'pro': 5,
+                'premium': 5,
+                'agency': -1 // unlimited
+            };
 
-            // Process features
+            const limit = LISTING_LIMITS[tier] ?? 1;
+            const isPaid = tier === 'premium' || tier === 'pro' || tier === 'agency';
+
+            // Check active listings count (skip for unlimited tiers)
+            if (limit > 0) {
+                const { count } = await supabase
+                    .from('properties')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('agent_id', user.id)
+                    .eq('status', 'active');
+
+                if (count !== null && count >= limit) {
+                    const tierName = tier === 'starter' || tier === 'free' ? 'Starter' : 'Pro';
+                    throw new Error(`${tierName} Plan Limit Reached. You can only have ${limit} active listing${limit > 1 ? 's' : ''}. Please upgrade to post more.`);
+                }
+            }
+
+            // 2. Auto-Generate Title
+            const locationName = locations.find(l => l.id === formData.location_id)?.name || "Abuja";
+            const typeName = landTypes.find(t => t.id === formData.land_type_id)?.name || "Land";
+            const estateName = formData.estate_id ? estates.find(e => e.id === formData.estate_id)?.name : "";
+
+            let autoTitle = `${formData.size}sqm ${typeName} in ${locationName}, Abuja`;
+            if (estateName) {
+                autoTitle = `${estateName} - ${formData.size}sqm ${typeName} in ${locationName}`;
+            }
+
+            // 3. Duplicate Check
+            const { count: dupCount } = await supabase
+                .from('properties')
+                .select('*', { count: 'exact', head: true })
+                .eq('agent_id', user.id)
+                .eq('title', autoTitle)
+                .eq('price', formData.price);
+
+            if (dupCount && dupCount > 0) {
+                throw new Error("You have already posted this exact property (Same Title & Price). Please avoid duplicates.");
+            }
+
+            // 4. Prepare Data
             const featuresArray = formData.features.split(',').map(f => f.trim()).filter(f => f !== "");
+            const slug = autoTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now().toString().slice(-4);
+            const initialStatus = isPaid ? 'active' : 'pending';
 
-            // Insert property
+            // 5. Insert
             const { error: insertError } = await supabase.from("properties").insert({
-                title: formData.title,
-                description: formData.description,
+                title: autoTitle,
+                description: `${autoTitle}. Located at ${formData.address}. ${formData.features}`, // Auto-desc for now
                 price: parseFloat(formData.price),
-                district: formData.district,
-                address: formData.address,
                 size_sqm: parseFloat(formData.size),
+                district: locationName, // Legacy support
+                location_id: formData.location_id,
+                land_type_id: formData.land_type_id,
+                estate_id: formData.estate_id || null,
+                address: formData.address,
                 title_type: formData.title_type,
                 images: [formData.image_url || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop"],
                 agent_id: user.id,
-                slug: formData.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now(),
-                status: "active",
+                slug: slug,
+                status: initialStatus,
                 features: featuresArray,
-                meta_title: formData.meta_title || formData.title,
-                meta_description: formData.meta_description || formData.description.substring(0, 150),
-                focus_keyword: formData.focus_keyword,
-                is_featured: isPremium ? formData.is_featured : false // Only allow if premium
+                is_featured: isPaid ? formData.is_featured : false,
+                is_distressed: formData.is_distressed,
+                has_foundation: formData.has_foundation
             });
 
-            if (insertError) {
-                throw insertError;
+            if (insertError) throw insertError;
+
+            if (initialStatus === 'pending') {
+                alert("Listing submitted! It is pending approval (Free Plan).");
+            } else {
+                alert("Property listed successfully!");
             }
 
-            alert("Property listed successfully!");
             router.push("/agent/dashboard");
             router.refresh();
         } catch (err: any) {
             console.error("Error creating listing:", err);
-            setError(err.message || "Failed to create listing. Please try again.");
+            setError(err.message || "Failed to create listing.");
         } finally {
             setLoading(false);
         }
@@ -163,64 +231,61 @@ export default function AddListingPage() {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-8">
-                        {/* Basic Info Section */}
+                        {/* Location & Type */}
                         <div className="space-y-6">
-                            <h2 className="text-lg font-semibold border-b pb-2">Basic Information</h2>
+                            <h2 className="text-lg font-semibold border-b pb-2">Property Details</h2>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Property Title</label>
-                                <Input
-                                    name="title"
-                                    placeholder="e.g. Prime Land in Guzape"
-                                    required
-                                    value={formData.title}
-                                    onChange={handleChange}
-                                />
-                            </div>
-
-                            <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg border">
-                                {isPremium ? (
-                                    <>
-                                        <input
-                                            type="checkbox"
-                                            id="is_featured"
-                                            name="is_featured"
-                                            checked={formData.is_featured}
-                                            onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                        />
-                                        <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
-                                            Pin this listing (Featured)
-                                        </label>
-                                    </>
-                                ) : (
-                                    <div className="flex items-center justify-between w-full">
-                                        <div className="flex items-center text-gray-400">
-                                            <input type="checkbox" disabled className="h-4 w-4 mr-2" />
-                                            <span className="text-sm">Pin this listing (Premium only)</span>
-                                        </div>
-                                        <Link href="/pricing" className="text-xs text-primary font-bold hover:underline">
-                                            Upgrade to Unlock
-                                        </Link>
-                                    </div>
-                                )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
+                                    <select
+                                        name="location_id"
+                                        className="w-full rounded-md border border-gray-200 p-2.5 bg-white"
+                                        required
+                                        value={formData.location_id}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select Location</option>
+                                        {locations.map(loc => (
+                                            <option key={loc.id} value={loc.id}>{loc.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Land Type *</label>
+                                    <select
+                                        name="land_type_id"
+                                        className="w-full rounded-md border border-gray-200 p-2.5 bg-white"
+                                        required
+                                        value={formData.land_type_id}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select Type</option>
+                                        {landTypes.map(type => (
+                                            <option key={type.id} value={type.id}>{type.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                                <textarea
-                                    name="description"
-                                    className="w-full rounded-md border border-gray-200 p-3 min-h-[100px] focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                    placeholder="Describe the property..."
-                                    required
-                                    value={formData.description}
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Estate (Optional)</label>
+                                <select
+                                    name="estate_id"
+                                    className="w-full rounded-md border border-gray-200 p-2.5 bg-white"
+                                    value={formData.estate_id}
                                     onChange={handleChange}
-                                />
+                                >
+                                    <option value="">Select Estate (if applicable)</option>
+                                    {estates.map(est => (
+                                        <option key={est.id} value={est.id}>{est.name}</option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Price (₦)</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Price (₦) *</label>
                                     <Input
                                         name="price"
                                         type="number"
@@ -231,7 +296,7 @@ export default function AddListingPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Size (sqm)</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Size (sqm) *</label>
                                     <Input
                                         name="size"
                                         type="number"
@@ -243,59 +308,47 @@ export default function AddListingPage() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
-                                    <select
-                                        name="district"
-                                        className="w-full rounded-md border border-gray-200 p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                        required
-                                        value={formData.district}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="">Select District</option>
-                                        <option value="Guzape">Guzape</option>
-                                        <option value="Maitama">Maitama</option>
-                                        <option value="Asokoro">Asokoro</option>
-                                        <option value="Wuse">Wuse</option>
-                                        <option value="Lugbe">Lugbe</option>
-                                        <option value="Idu">Idu</option>
-                                        <option value="Katampe">Katampe</option>
-                                        <option value="Jahi">Jahi</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Title Type</label>
-                                    <select
-                                        name="title_type"
-                                        className="w-full rounded-md border border-gray-200 p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                        required
-                                        value={formData.title_type}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="C_of_O">C of O</option>
-                                        <option value="R_of_O">R of O</option>
-                                        <option value="Allocation">Allocation</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Street Address / Landmark</label>
                                 <Input
                                     name="address"
-                                    placeholder="e.g. Plot 123, Diplomatic Zone"
+                                    placeholder="e.g. Plot 123, Near Shoprite"
                                     value={formData.address}
                                     onChange={handleChange}
                                 />
                             </div>
                         </div>
 
-                        {/* Media Section */}
+                        {/* Special Categories */}
+                        <div className="space-y-4 bg-gray-50 p-4 rounded-lg border">
+                            <h3 className="font-medium text-gray-900">Special Tags</h3>
+                            <div className="flex flex-col gap-3">
+                                <label className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        name="is_distressed"
+                                        checked={formData.is_distressed}
+                                        onChange={handleChange}
+                                        className="h-4 w-4 rounded border-gray-300 text-primary"
+                                    />
+                                    <span className="text-sm text-gray-700">Distress Sale (Urgent)</span>
+                                </label>
+                                <label className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        name="has_foundation"
+                                        checked={formData.has_foundation}
+                                        onChange={handleChange}
+                                        className="h-4 w-4 rounded border-gray-300 text-primary"
+                                    />
+                                    <span className="text-sm text-gray-700">Has Foundation / Unfinished Building</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* Image Upload */}
                         <div className="space-y-6">
                             <h2 className="text-lg font-semibold border-b pb-2">Property Image</h2>
-
                             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:bg-gray-50 transition-colors">
                                 {formData.image_url ? (
                                     <div className="relative w-full h-64 rounded-lg overflow-hidden">
@@ -304,7 +357,6 @@ export default function AddListingPage() {
                                             alt="Property preview"
                                             fill
                                             className="object-cover"
-                                            onError={(e) => console.error("Image load error:", e)}
                                         />
                                         <button
                                             type="button"
@@ -317,13 +369,12 @@ export default function AddListingPage() {
                                 ) : (
                                     <div className="flex flex-col items-center">
                                         <Upload className="h-12 w-12 text-gray-400 mb-4" />
-                                        <p className="text-sm text-gray-600 mb-2">Click to upload or drag and drop</p>
-                                        <p className="text-xs text-gray-500">SVG, PNG, JPG, GIF or WebP (max. 5MB)</p>
+                                        <p className="text-sm text-gray-600 mb-2">Click to upload image</p>
                                         <input
                                             type="file"
                                             ref={fileInputRef}
                                             className="hidden"
-                                            accept="image/png, image/jpeg, image/gif, image/svg+xml, image/webp"
+                                            accept="image/*"
                                             onChange={handleImageUpload}
                                         />
                                         <Button
@@ -333,63 +384,10 @@ export default function AddListingPage() {
                                             onClick={() => fileInputRef.current?.click()}
                                             disabled={uploading}
                                         >
-                                            {uploading ? (
-                                                <>
-                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Uploading...
-                                                </>
-                                            ) : (
-                                                "Select Image"
-                                            )}
+                                            {uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Select Image"}
                                         </Button>
                                     </div>
                                 )}
-                            </div>
-                        </div>
-
-                        {/* Features & SEO Section */}
-                        <div className="space-y-6">
-                            <h2 className="text-lg font-semibold border-b pb-2">Features & SEO</h2>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Features (Comma separated)</label>
-                                <Input
-                                    name="features"
-                                    placeholder="e.g. Fenced, Tarred Road, Electricity, Borehole"
-                                    value={formData.features}
-                                    onChange={handleChange}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Focus Keyword</label>
-                                    <Input
-                                        name="focus_keyword"
-                                        placeholder="e.g. Land for sale in Guzape"
-                                        value={formData.focus_keyword}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
-                                    <Input
-                                        name="meta_title"
-                                        placeholder="Custom SEO Title (optional)"
-                                        value={formData.meta_title}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
-                                <textarea
-                                    name="meta_description"
-                                    className="w-full rounded-md border border-gray-200 p-3 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                    placeholder="Custom SEO Description (optional)"
-                                    value={formData.meta_description}
-                                    onChange={handleChange}
-                                />
                             </div>
                         </div>
 
