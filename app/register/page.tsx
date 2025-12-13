@@ -28,10 +28,20 @@ export default function RegisterPage() {
 
         const supabase = createClient();
 
-        // 1. Sign up the user
+        const normalizedRole = accountType === 'individual' ? 'user' : accountType;
+
+        // 1. Sign up the user (also store metadata for fallback profile creation)
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+                data: {
+                    full_name: fullName,
+                    phone_number: phone,
+                    agency_name: accountType === 'agency' ? agency : accountType === 'agent' ? 'Independent Agent' : null,
+                    role: normalizedRole,
+                },
+            },
         });
 
         if (authError) {
@@ -42,20 +52,21 @@ export default function RegisterPage() {
 
         if (authData.user) {
             // 2. Create the profile with selected role
-            const { error: profileError } = await supabase
-                .from('profiles')
-                .insert({
+            // 2. Create the profile using server-side route (bypasses RLS issues when no session)
+            const profileResp = await fetch("/api/profile/create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
                     id: authData.user.id,
                     full_name: fullName,
                     phone_number: phone,
-                    agency_name: accountType === 'agency' ? agency : null,
-                    role: accountType, // 'individual', 'agent', or 'agency'
-                    is_verified: false,
-                    subscription_tier: 'starter' // Everyone starts as starter/free
-                });
+                    agency_name: accountType === 'agency' ? agency : accountType === 'agent' ? 'Independent Agent' : null,
+                    role: normalizedRole,
+                }),
+            });
 
-            if (profileError) {
-                console.error("Profile creation error:", profileError);
+            if (!profileResp.ok) {
+                console.error("Profile creation error:", await profileResp.text());
             }
 
             // 3. Show Success Message (No Redirect)

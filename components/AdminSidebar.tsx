@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, MapPin, Layers, Users, List, LogOut, Loader2 } from "lucide-react";
+import { LayoutDashboard, MapPin, Layers, Users, List, LogOut, Loader2, FileText } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
@@ -13,6 +13,7 @@ const adminLinks = [
     { name: "Agents", href: "/admin/agents", icon: Users },
     { name: "Listings", href: "/admin/listings", icon: List },
     { name: "Area Guides", href: "/admin/districts", icon: MapPin },
+    { name: "Blog", href: "/admin/blog", icon: FileText },
 ];
 
 export default function AdminSidebar() {
@@ -27,13 +28,13 @@ export default function AdminSidebar() {
             const { error } = await supabase.auth.signOut();
             if (error) {
                 console.error("Logout error:", error);
-                setLoggingOut(false);
                 return;
             }
-            router.push("/login");
-            router.refresh();
+            // Force a hard reload to clear all client-side state
+            window.location.href = "/login";
         } catch (err) {
             console.error("Logout failed:", err);
+        } finally {
             setLoggingOut(false);
         }
     };
@@ -52,8 +53,8 @@ export default function AdminSidebar() {
                             key={link.name}
                             href={link.href}
                             className={`flex items-center gap-3 px-4 py-2 rounded text-sm font-medium transition-colors ${isActive
-                                    ? "bg-gray-100 text-gray-900"
-                                    : "text-gray-700 hover:bg-gray-100"
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-700 hover:bg-gray-100"
                                 }`}
                         >
                             <Icon className="h-4 w-4" />

@@ -34,31 +34,60 @@ export default function PricingPage() {
     const [user, setUser] = useState<any>(null);
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState<string | null>(null);
     const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
     const router = useRouter();
 
     useEffect(() => {
+        let isMounted = true;
         const getUser = async () => {
             try {
                 const supabase = createClient();
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user }, error } = await supabase.auth.getUser();
+                if (!isMounted) return;
+                if (error) {
+                    console.error("Auth error on pricing page:", error);
+                    setLoadError("We couldn't confirm your account right now, but you can still view plans.");
+                }
                 setUser(user);
 
                 if (user) {
-                    const { data } = await supabase
+                    const { data, error: profileError } = await supabase
                         .from('profiles')
                         .select('subscription_tier, subscription_expiry')
                         .eq('id', user.id)
                         .single();
-                    setProfile(data);
+                    if (profileError) {
+                        console.error("Profile fetch error on pricing:", profileError);
+                        setLoadError("We couldn't load your current plan. Plans are still visible below.");
+                    }
+                    if (!isMounted) return;
+
+                    // Fallback: if expired, treat as starter in UI
+                    const expiry = data?.subscription_expiry ? new Date(data.subscription_expiry) : null;
+                    if (expiry && expiry.getTime() < Date.now()) {
+                        setProfile({ ...data, subscription_tier: 'starter' });
+                    } else {
+                        setProfile(data);
+                    }
                 }
             } catch (e) {
                 console.error("Error checking auth status:", e);
+                if (isMounted) setLoadError("We couldn't load your account. Plans are still visible.");
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
+        // Failsafe in case network hangs
+        const timeout = setTimeout(() => {
+            if (isMounted) setLoading(false);
+        }, 5000);
+
         getUser();
+        return () => {
+            isMounted = false;
+            clearTimeout(timeout);
+        };
     }, []);
 
     const handleSuccess = async (reference: any, tier: string) => {
@@ -106,6 +135,7 @@ export default function PricingPage() {
                 <div className="text-center max-w-3xl mx-auto mb-8">
                     <h1 className="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
                     <p className="text-xl text-gray-600">Choose the plan that helps you sell land faster in Abuja.</p>
+                    {loadError && <p className="text-sm text-yellow-700 mt-2">{loadError}</p>}
                 </div>
 
                 {/* Billing Toggle */}

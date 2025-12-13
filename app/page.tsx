@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -7,8 +5,7 @@ import Image from "next/image";
 import { Search, MapPin, CheckCircle, TrendingUp, ShieldCheck, Users, ArrowRight } from "lucide-react";
 import PropertyCard from "@/components/PropertyCard";
 
-import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/server";
 
 // Define Property type matching PropertyCard props
 type Property = {
@@ -22,36 +19,27 @@ type Property = {
   slug: string;
 };
 
-export default function Home() {
-  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
+export const revalidate = 300;
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from('properties')
-        .select('*')
-        .order('is_featured', { ascending: false })
-        .order('created_at', { ascending: false })
-        .limit(3);
+export default async function Home() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('properties')
+    .select('id, title, price, size_sqm, district, images, title_type, slug')
+    .order('is_featured', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(3);
 
-      if (data) {
-        const mappedProps: Property[] = data.map((p: any) => ({
-          id: p.id,
-          title: p.title,
-          price: p.price,
-          district: p.district,
-          size: p.size,
-          image: p.images?.[0] || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop',
-          titleType: p.title_type,
-          slug: p.slug || p.id
-        }));
-        setFeaturedProperties(mappedProps);
-      }
-    };
-
-    fetchProperties();
-  }, []);
+  const featuredProperties: Property[] = (data || []).map((p: any) => ({
+    id: p.id,
+    title: p.title,
+    price: p.price,
+    district: p.district,
+    size: p.size_sqm || p.size,
+    image: p.images?.[0] || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop',
+    titleType: p.title_type,
+    slug: p.slug || p.id
+  }));
   return (
     <main className="min-h-screen">
       {/* Hero Section */}

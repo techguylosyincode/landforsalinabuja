@@ -20,6 +20,25 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Blog SEO migration
+
+Run the SEO migration to add meta fields and publishing workflow to `blog_posts`:
+
+```bash
+psql "$SUPABASE_DB_URL" -f supabase/migration_blog_seo.sql
+```
+
+Notes:
+- `SUPABASE_DB_URL` should be your Supabase connection string (service role recommended).
+- Set `SUPABASE_SERVICE_KEY` in `.env.local` so server actions can write blog posts and upload covers.
+- Create a `blog-assets` storage bucket in Supabase and allow admin users to write to it (for cover uploads).
+- Restart `npm run dev` after updating environment variables.
+
+Bucket setup helper:
+```bash
+psql "$SUPABASE_DB_URL" -f supabase/migration_blog_assets_policy.sql
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

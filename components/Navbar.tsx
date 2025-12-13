@@ -12,37 +12,38 @@ export default function Navbar() {
 
     useEffect(() => {
         const supabase = createClient();
+
+        const syncAdminState = async (sessionUser: User | null) => {
+            if (!sessionUser) {
+                setIsAdmin(false);
+                return;
+            }
+
+            const rawRole = (sessionUser.user_metadata?.role || (sessionUser.app_metadata as any)?.role) as string | undefined;
+            if (rawRole && rawRole.toLowerCase() === "admin") {
+                setIsAdmin(true);
+                return;
+            }
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', sessionUser.id)
+                .maybeSingle();
+
+            setIsAdmin(profile?.role === 'admin');
+        };
+
         const getUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);
-
-            if (user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', user.id)
-                    .single();
-                if (profile?.role === 'admin') {
-                    setIsAdmin(true);
-                }
-            }
+            await syncAdminState(user);
         };
         getUser();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
             setUser(session?.user ?? null);
-            if (session?.user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', session.user.id)
-                    .single();
-                if (profile?.role === 'admin') {
-                    setIsAdmin(true);
-                }
-            } else {
-                setIsAdmin(false);
-            }
+            await syncAdminState(session?.user ?? null);
         });
 
         return () => subscription.unsubscribe();

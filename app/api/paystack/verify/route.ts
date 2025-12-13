@@ -1,4 +1,4 @@
-import { createClient } from "../../../lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 // Replace with your actual Paystack Secret Key
@@ -14,15 +14,20 @@ export async function POST(request: Request) {
 
         // Verify transaction with Paystack
         const verifyRes = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
-            headers: {
-                Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
-            },
+            headers: { Authorization: `Bearer ${PAYSTACK_SECRET_KEY}` },
         });
 
-        const verifyData = await verifyRes.json();
-
-        if (!verifyData.status || verifyData.data.status !== "success") {
+        if (!verifyRes.ok) {
+            console.error("Paystack verify HTTP error:", verifyRes.status, verifyRes.statusText);
             return NextResponse.json({ error: "Payment verification failed" }, { status: 400 });
+        }
+
+        const verifyData = await verifyRes.json();
+        const paystackStatus = verifyData?.data?.status;
+
+        if (!verifyData?.status || paystackStatus !== "success") {
+            console.warn("Paystack verification declined:", verifyData);
+            return NextResponse.json({ error: "Payment declined or not successful" }, { status: 400 });
         }
 
         // Payment successful, update user subscription
@@ -44,7 +49,9 @@ export async function POST(request: Request) {
             .update({
                 subscription_tier: subscriptionTier,
                 subscription_expiry: expiryDate.toISOString(),
-                is_verified: true
+                is_verified: true,
+                verification_status: 'verified',
+                verified_at: new Date().toISOString(),
             })
             .eq('id', userId);
 

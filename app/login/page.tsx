@@ -21,18 +21,30 @@ export default function LoginPage() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        const supabase = createClient();
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        try {
+            const supabase = createClient();
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
 
-        if (error) {
-            setError(error.message);
+            if (error) {
+                console.error("Login error:", error);
+                if (error.message === "Invalid login credentials") {
+                    setError("Invalid email or password. Please check your credentials and try again.");
+                } else {
+                    setError(error.message);
+                }
+                return;
+            }
+
+            // Hard redirect to ensure session cookies are picked by server components immediately
+            window.location.href = "/agent/dashboard";
+        } catch (err: any) {
+            console.error("Login failed:", err);
+            setError("Unable to reach the server. Please check your connection and try again.");
+        } finally {
             setLoading(false);
-        } else {
-            router.push("/agent/dashboard");
-            router.refresh();
         }
     };
 
@@ -103,9 +115,16 @@ export default function LoginPage() {
                         </div>
 
                         <div className="text-sm">
-                            <a href="#" className="font-medium text-primary hover:text-primary/80">
+                            <Link
+                                href="/forgot-password"
+                                className="font-medium text-primary hover:text-primary/80"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    alert("Please contact support to reset your password.");
+                                }}
+                            >
                                 Forgot your password?
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

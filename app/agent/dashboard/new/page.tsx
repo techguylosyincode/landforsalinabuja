@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowLeft, Upload, AlertCircle, X, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle, X, Loader2, Sparkles, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 export default function AddListingPage() {
@@ -15,6 +15,7 @@ export default function AddListingPage() {
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isPremium, setIsPremium] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Dropdown Data
@@ -29,8 +30,23 @@ export default function AddListingPage() {
             // Fetch User & Premium Status
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                const { data } = await supabase.from('profiles').select('subscription_tier').eq('id', user.id).single();
-                if (data?.subscription_tier === 'premium' || data?.subscription_tier === 'pro' || data?.subscription_tier === 'agency') setIsPremium(true);
+                const { data } = await supabase.from('profiles').select('subscription_tier, subscription_expiry, verification_status, is_verified').eq('id', user.id).single();
+
+                // Treat expired as starter in the UI
+                const expiry = data?.subscription_expiry ? new Date(data.subscription_expiry) : null;
+                const effectiveTier = expiry && expiry.getTime() < Date.now() ? 'starter' : data?.subscription_tier;
+
+                if (effectiveTier === 'premium' || effectiveTier === 'pro' || effectiveTier === 'agency') {
+                    setIsPremium(true);
+                } else {
+                    setIsPremium(false);
+                }
+
+                if (data?.verification_status === "verified" || data?.is_verified) {
+                    setIsVerified(true);
+                } else {
+                    setIsVerified(false);
+                }
             }
 
             // Fetch Dropdowns
@@ -52,13 +68,54 @@ export default function AddListingPage() {
         estate_id: "",
         address: "",
         size: "",
+        slug: "",
         title_type: "C_of_O",
         image_url: "",
         features: "", // Comma separated
+        description: "",
+        meta_title: "",
+        meta_description: "",
+        focus_keyword: "",
         is_featured: false,
         is_distressed: false,
         has_foundation: false
     });
+
+    // Auto-generate SEO fields when key fields change
+    const generateSeoSuggestions = useCallback(() => {
+        const locationName = locations.find(l => l.id === formData.location_id)?.name || "";
+        const typeName = landTypes.find(t => t.id === formData.land_type_id)?.name || "Land";
+        const estateName = formData.estate_id ? estates.find(e => e.id === formData.estate_id)?.name : "";
+        const size = formData.size;
+        const price = formData.price ? `₦${parseInt(formData.price).toLocaleString()}` : "";
+        const titleTypeText = formData.title_type === 'C_of_O' ? 'C of O available' : formData.title_type === 'R_of_O' ? 'R of O available' : '';
+
+        if (!locationName || !size) return;
+
+        // Generate focus keyword
+        const suggestedKeyword = estateName
+            ? `${typeName.toLowerCase()} for sale in ${estateName} ${locationName}`
+            : `${typeName.toLowerCase()} for sale in ${locationName} Abuja`;
+
+        // Generate meta title (max 60 chars)
+        const suggestedTitle = estateName
+            ? `${size}sqm ${typeName} in ${estateName}, ${locationName} | Buy Now`
+            : `${size}sqm ${typeName} for Sale in ${locationName}, Abuja`;
+
+        // Generate meta description (max 160 chars)
+        const suggestedDesc = `Buy ${size}sqm ${typeName.toLowerCase()} in ${locationName}, Abuja${estateName ? ` (${estateName})` : ''}. ${price ? `Price: ${price}.` : ''} ${titleTypeText ? titleTypeText + '.' : ''} Contact verified agent now.`;
+
+        // Generate description
+        const suggestedDescription = `${size}sqm ${typeName.toLowerCase()} available for sale in ${locationName}, Abuja${estateName ? ` within ${estateName}` : ''}. ${formData.address ? `Located at ${formData.address}.` : ''} ${titleTypeText ? `This property comes with ${titleTypeText}.` : ''} ${formData.features ? `Features include: ${formData.features}.` : ''} Contact agent for inspection and more details.`;
+
+        setFormData(prev => ({
+            ...prev,
+            focus_keyword: prev.focus_keyword || suggestedKeyword,
+            meta_title: prev.meta_title || suggestedTitle.substring(0, 60),
+            meta_description: prev.meta_description || suggestedDesc.substring(0, 160),
+            description: prev.description || suggestedDescription
+        }));
+    }, [locations, landTypes, estates, formData.location_id, formData.land_type_id, formData.estate_id, formData.size, formData.price, formData.title_type, formData.address, formData.features]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -77,8 +134,23 @@ export default function AddListingPage() {
         setUploading(true);
         setError(null);
         const file = e.target.files[0];
+
+        // Basic client-side checks
+        const MAX_SIZE_MB = 3;
+        if (!file.type.startsWith("image/")) {
+            setError("Please upload an image file (jpg, png, webp).");
+            setUploading(false);
+            return;
+        }
+        if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+            setError(`Image is too large. Max size is ${MAX_SIZE_MB}MB.`);
+            setUploading(false);
+            return;
+        }
+
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
+        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+        const fileName = `${Date.now()}-${sanitizedName || `upload.${fileExt}`}`;
         const filePath = `${fileName}`;
 
         try {
@@ -116,9 +188,31 @@ export default function AddListingPage() {
                 return;
             }
 
-            // 1. Check Limits & Set Status
-            const { data: profile } = await supabase.from('profiles').select('subscription_tier').eq('id', user.id).single();
-            const tier = profile?.subscription_tier || 'starter';
+            // Basic client-side sanity checks
+            if (!formData.image_url) {
+            setError("Please upload at least one property photo.");
+            return;
+        }
+
+        const priceValue = parseFloat(formData.price);
+        const sizeValue = parseFloat(formData.size);
+        if (Number.isNaN(priceValue) || priceValue <= 0) {
+            setError("Price must be a positive number.");
+            return;
+        }
+        if (Number.isNaN(sizeValue) || sizeValue <= 0) {
+            setError("Size must be a positive number.");
+            return;
+        }
+        if (!formData.description || formData.description.trim().length < 40) {
+            setError("Please add a short description (at least 40 characters).");
+            return;
+        }
+
+            // 1. Check Limits & Set Status (respect expiry)
+            const { data: profile } = await supabase.from('profiles').select('subscription_tier, subscription_expiry').eq('id', user.id).single();
+            const expiry = profile?.subscription_expiry ? new Date(profile.subscription_expiry) : null;
+            const tier = expiry && expiry.getTime() < Date.now() ? 'starter' : (profile?.subscription_tier || 'starter');
 
             // Define listing limits per tier
             const LISTING_LIMITS: Record<string, number> = {
@@ -170,13 +264,22 @@ export default function AddListingPage() {
 
             // 4. Prepare Data
             const featuresArray = formData.features.split(',').map(f => f.trim()).filter(f => f !== "");
-            const slug = autoTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now().toString().slice(-4);
-            const initialStatus = isPaid ? 'active' : 'pending';
+            const slugSource = (formData.slug || autoTitle || "").toLowerCase();
+            const slugBase = slugSource.replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+            const slug = (slugBase.slice(0, 60) || "listing") + "-" + Date.now().toString().slice(-4);
+            const canAutoPublish = isPaid && isVerified;
+            const initialStatus = canAutoPublish ? 'active' : 'pending';
 
-            // 5. Insert
+            // 5. Prepare SEO fields with fallbacks
+            const finalDescription = (formData.description || `${autoTitle}. Located at ${formData.address}. ${formData.features}`).slice(0, 5000);
+            const finalMetaTitle = (formData.meta_title || autoTitle).slice(0, 60);
+            const finalMetaDescription = (formData.meta_description || finalDescription.substring(0, 160)).slice(0, 160);
+            const finalFocusKeyword = formData.focus_keyword || `${typeName.toLowerCase()} for sale in ${locationName}`;
+
+            // 6. Insert
             const { error: insertError } = await supabase.from("properties").insert({
                 title: autoTitle,
-                description: `${autoTitle}. Located at ${formData.address}. ${formData.features}`, // Auto-desc for now
+                description: finalDescription,
                 price: parseFloat(formData.price),
                 size_sqm: parseFloat(formData.size),
                 district: locationName, // Legacy support
@@ -190,6 +293,9 @@ export default function AddListingPage() {
                 slug: slug,
                 status: initialStatus,
                 features: featuresArray,
+                meta_title: finalMetaTitle,
+                meta_description: finalMetaDescription,
+                focus_keyword: finalFocusKeyword,
                 is_featured: isPaid ? formData.is_featured : false,
                 is_distressed: formData.is_distressed,
                 has_foundation: formData.has_foundation
@@ -198,7 +304,7 @@ export default function AddListingPage() {
             if (insertError) throw insertError;
 
             if (initialStatus === 'pending') {
-                alert("Listing submitted! It is pending approval (Free Plan).");
+                alert(isVerified ? "Listing submitted! It is pending approval for your plan." : "Listing submitted! It will stay pending until verification/upgrade.");
             } else {
                 alert("Property listed successfully!");
             }
@@ -317,6 +423,47 @@ export default function AddListingPage() {
                                     onChange={handleChange}
                                 />
                             </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Custom Slug (optional)</label>
+                                <Input
+                                    name="slug"
+                                    placeholder="e.g. karasana-east-promo"
+                                    value={formData.slug}
+                                    onChange={handleChange}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Leave blank to auto-generate a short slug.</p>
+                            </div>
+                        </div>
+
+                        {/* Title Type Selection */}
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Title Document Type *</label>
+                                    <select
+                                        name="title_type"
+                                        className="w-full rounded-md border border-gray-200 p-2.5 bg-white"
+                                        required
+                                        value={formData.title_type}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="C_of_O">Certificate of Occupancy (C of O)</option>
+                                        <option value="R_of_O">Right of Occupancy (R of O)</option>
+                                        <option value="Allocation">Allocation Letter</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Features (Comma separated)</label>
+                                    <Input
+                                        name="features"
+                                        placeholder="e.g. Fenced, Tarred Road, Electricity"
+                                        value={formData.features}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Special Categories */}
@@ -344,6 +491,97 @@ export default function AddListingPage() {
                                     <span className="text-sm text-gray-700">Has Foundation / Unfinished Building</span>
                                 </label>
                             </div>
+                        </div>
+
+                        {/* Description & SEO Section */}
+                        <div className="space-y-6">
+                            <div className="flex items-center justify-between border-b pb-2">
+                                <h2 className="text-lg font-semibold flex items-center gap-2">
+                                    <Search className="h-5 w-5 text-primary" />
+                                    Description & SEO
+                                </h2>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={generateSeoSuggestions}
+                                    className="gap-1"
+                                >
+                                    <Sparkles className="h-4 w-4" />
+                                    Auto-Generate
+                                </Button>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Property Description</label>
+                                <textarea
+                                    name="description"
+                                    className="w-full rounded-md border border-gray-200 p-3 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                    placeholder="Describe your property in detail... (Click Auto-Generate for suggestions)"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">A good description helps buyers find your property</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Focus Keyword
+                                        <span className="text-xs text-gray-400 ml-1">(for SEO)</span>
+                                    </label>
+                                    <Input
+                                        name="focus_keyword"
+                                        placeholder="e.g. land for sale in Guzape Abuja"
+                                        value={formData.focus_keyword}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Meta Title
+                                        <span className="text-xs text-gray-400 ml-1">({formData.meta_title.length}/60)</span>
+                                    </label>
+                                    <Input
+                                        name="meta_title"
+                                        placeholder="SEO title for search engines"
+                                        value={formData.meta_title}
+                                        onChange={handleChange}
+                                        maxLength={60}
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Meta Description
+                                    <span className="text-xs text-gray-400 ml-1">({formData.meta_description.length}/160)</span>
+                                </label>
+                                <textarea
+                                    name="meta_description"
+                                    className="w-full rounded-md border border-gray-200 p-3 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                    placeholder="Brief description for search results..."
+                                    value={formData.meta_description}
+                                    onChange={handleChange}
+                                    maxLength={160}
+                                />
+                            </div>
+
+                            {/* SEO Preview */}
+                            {(formData.meta_title || formData.meta_description) && (
+                                <div className="bg-gray-50 p-4 rounded-lg border">
+                                    <p className="text-xs text-gray-500 mb-2">Search Result Preview:</p>
+                                    <div className="bg-white p-3 rounded border">
+                                        <p className="text-blue-700 text-lg hover:underline cursor-pointer truncate">
+                                            {formData.meta_title || "Your property title will appear here"}
+                                        </p>
+                                        <p className="text-green-700 text-sm">landforsaleinabuja.ng › property › ...</p>
+                                        <p className="text-gray-600 text-sm line-clamp-2">
+                                            {formData.meta_description || "Your meta description will appear here..."}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Image Upload */}
