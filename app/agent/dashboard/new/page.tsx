@@ -181,17 +181,31 @@ export default function AddListingPage() {
         setError(null);
 
         try {
-            const supabase = createClient();
-            const { data: { user } } = await supabase.auth.getUser();
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
 
-            if (!user) {
-                setError("You must be logged in to post a property.");
-                return;
-            }
+        if (!user) {
+            setError("You must be logged in to post a property.");
+            setLoading(false);
+            return;
+        }
 
-            // Basic client-side sanity checks
-            if (!formData.image_url) {
+        if (!formData.location_id) {
+            setError("Please select a location.");
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.land_type_id) {
+            setError("Please select a land type.");
+            setLoading(false);
+            return;
+        }
+
+        // Basic client-side sanity checks
+        if (!formData.image_url) {
             setError("Please upload at least one property photo.");
+            setLoading(false);
             return;
         }
 
@@ -199,14 +213,17 @@ export default function AddListingPage() {
         const sizeValue = parseFloat(formData.size);
         if (Number.isNaN(priceValue) || priceValue <= 0) {
             setError("Price must be a positive number.");
+            setLoading(false);
             return;
         }
         if (Number.isNaN(sizeValue) || sizeValue <= 0) {
             setError("Size must be a positive number.");
+            setLoading(false);
             return;
         }
         if (!formData.description || formData.description.trim().length < 40) {
             setError("Please add a short description (at least 40 characters).");
+            setLoading(false);
             return;
         }
 
