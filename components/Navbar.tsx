@@ -20,7 +20,18 @@ export default function Navbar() {
             }
 
             const rawRole = (sessionUser.user_metadata?.role || (sessionUser.app_metadata as any)?.role) as string | undefined;
+            const email = sessionUser.email?.toLowerCase();
+            const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.ADMIN_EMAILS || "")
+                .split(",")
+                .map((e) => e.trim().toLowerCase())
+                .filter(Boolean)
+                .concat(["airealentng@gmail.com"]);
+
             if (rawRole && rawRole.toLowerCase() === "admin") {
+                setIsAdmin(true);
+                return;
+            }
+            if (email && adminEmails.includes(email)) {
                 setIsAdmin(true);
                 return;
             }

@@ -28,10 +28,9 @@ export default function AdminSidebar() {
             const { error } = await supabase.auth.signOut();
             if (error) {
                 console.error("Logout error:", error);
-                return;
             }
-            // Force a hard reload to clear all client-side state
-            window.location.href = "/login";
+            // Hard reload to clear any cached state/cookies
+            window.location.href = "/login?logged_out=1";
         } catch (err) {
             console.error("Logout failed:", err);
         } finally {

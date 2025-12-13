@@ -24,10 +24,12 @@ export default async function AdminLayout({
         .eq("id", user.id)
         .maybeSingle();
 
+    const defaultAdminEmails = ["airealentng@gmail.com"];
     const adminEmailList = (process.env.ADMIN_EMAILS || "")
         .split(",")
         .map((e) => e.trim().toLowerCase())
-        .filter(Boolean);
+        .filter(Boolean)
+        .concat(defaultAdminEmails);
 
     const metadataRole = (user.user_metadata?.role || (user.app_metadata as any)?.role) as string | undefined;
     const isAdminByMetadata = metadataRole?.toLowerCase?.() === "admin";
