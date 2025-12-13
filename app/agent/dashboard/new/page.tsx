@@ -62,6 +62,7 @@ export default function AddListingPage() {
     }, []);
 
     const [formData, setFormData] = useState({
+        title: "",
         price: "",
         location_id: "",
         land_type_id: "",
@@ -266,24 +267,26 @@ export default function AddListingPage() {
             const featuresArray = formData.features.split(',').map(f => f.trim()).filter(f => f !== "");
             const slugSource = (formData.slug || autoTitle || "").toLowerCase();
             const slugBase = slugSource.replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-            const slug = (slugBase.slice(0, 60) || "listing") + "-" + Date.now().toString().slice(-4);
-            const canAutoPublish = isPaid && isVerified;
-            const initialStatus = canAutoPublish ? 'active' : 'pending';
+        const slug = (slugBase.slice(0, 60) || "listing") + "-" + Date.now().toString().slice(-4);
+        const canAutoPublish = isPaid && isVerified;
+        const initialStatus = canAutoPublish ? 'active' : 'pending';
 
-            // 5. Prepare SEO fields with fallbacks
-            const finalDescription = (formData.description || `${autoTitle}. Located at ${formData.address}. ${formData.features}`).slice(0, 5000);
-            const finalMetaTitle = (formData.meta_title || autoTitle).slice(0, 60);
-            const finalMetaDescription = (formData.meta_description || finalDescription.substring(0, 160)).slice(0, 160);
-            const finalFocusKeyword = formData.focus_keyword || `${typeName.toLowerCase()} for sale in ${locationName}`;
+        // 5. Prepare SEO fields with fallbacks
+        const titleInput = (formData.title || "").trim();
+        const finalTitle = (titleInput || autoTitle || "Land for sale in Abuja").slice(0, 120);
+        const finalDescription = (formData.description || `${finalTitle}. Located at ${formData.address}. ${formData.features}`).slice(0, 5000);
+        const finalMetaTitle = (formData.meta_title || finalTitle).slice(0, 60);
+        const finalMetaDescription = (formData.meta_description || finalDescription.substring(0, 160)).slice(0, 160);
+        const finalFocusKeyword = formData.focus_keyword || `${typeName.toLowerCase()} for sale in ${locationName}`;
 
-            // 6. Insert
-            const { error: insertError } = await supabase.from("properties").insert({
-                title: autoTitle,
-                description: finalDescription,
-                price: parseFloat(formData.price),
-                size_sqm: parseFloat(formData.size),
-                district: locationName, // Legacy support
-                location_id: formData.location_id,
+        // 6. Insert
+        const { error: insertError } = await supabase.from("properties").insert({
+            title: finalTitle,
+            description: finalDescription,
+            price: parseFloat(formData.price),
+            size_sqm: parseFloat(formData.size),
+            district: locationName, // Legacy support
+            location_id: formData.location_id,
                 land_type_id: formData.land_type_id,
                 estate_id: formData.estate_id || null,
                 address: formData.address,
@@ -342,6 +345,16 @@ export default function AddListingPage() {
                             <h2 className="text-lg font-semibold border-b pb-2">Property Details</h2>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Title (optional override)</label>
+                                    <Input
+                                        name="title"
+                                        placeholder="e.g. 600sqm Residential Plot in Dei-Dei"
+                                        value={formData.title}
+                                        onChange={handleChange}
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1">Leave blank to auto-generate from size, type, and location.</p>
+                                </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
                                     <select
