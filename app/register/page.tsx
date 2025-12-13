@@ -13,6 +13,19 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [accountType, setAccountType] = useState<'individual' | 'agent' | 'agency'>('individual');
+    const sourcePath = "/register";
+
+    const logEvent = async (event_type: string, payload: Record<string, any> = {}) => {
+        try {
+            await fetch("/api/signup/event", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ event_type, source_path: sourcePath, ...payload }),
+            });
+        } catch (err) {
+            console.warn("Signup event log failed:", err);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -27,6 +40,8 @@ export default function RegisterPage() {
         const agency = formData.get("agency") as string;
 
         const supabase = createClient();
+
+        logEvent("register_submit_attempt", { email, role_selected: accountType });
 
         const normalizedRole = accountType === 'individual' ? 'user' : accountType;
 
@@ -51,6 +66,11 @@ export default function RegisterPage() {
         }
 
         if (authData.user) {
+            logEvent("register_success", {
+                email,
+                role_selected: accountType,
+                user_id: authData.user.id,
+            });
             // 2. Create the profile with selected role
             // 2. Create the profile using server-side route (bypasses RLS issues when no session)
             const profileResp = await fetch("/api/profile/create", {
@@ -139,7 +159,14 @@ export default function RegisterPage() {
                     <div className="rounded-md shadow-sm space-y-4">
                         <div>
                             <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">Full Name</label>
-                            <Input id="full_name" name="full_name" required placeholder="John Doe" className="mt-1" />
+                            <Input
+                                id="full_name"
+                                name="full_name"
+                                required
+                                placeholder="John Doe"
+                                className="mt-1"
+                                onFocus={() => logEvent("register_start", { role_selected: accountType })}
+                            />
                         </div>
 
                         {accountType === 'agency' && (

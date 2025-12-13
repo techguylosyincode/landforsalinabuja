@@ -8,6 +8,8 @@ type AgentProfile = {
     full_name: string | null;
     agency_name: string | null;
     phone_number: string | null;
+    role?: string | null;
+    subscription_tier?: string | null;
     is_verified: boolean | null;
     verification_status?: string | null;
     verification_reason?: string | null;
@@ -24,7 +26,7 @@ export default async function ManageAgents() {
     const { data: { user: adminUser } = { user: null } } = await supabase.auth.getUser();
     const { data: agents } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, full_name, agency_name, phone_number, role, subscription_tier, is_verified, verification_status, verification_reason, verification_submitted_at, verified_at, cac_number, id_type, id_number, proof_files')
         .neq('role', 'admin') // Exclude admins, show only agents/users
         .order('created_at', { ascending: false });
 
@@ -93,6 +95,7 @@ export default async function ManageAgents() {
                             <th className="p-4 font-medium text-gray-500">Agent Name</th>
                             <th className="p-4 font-medium text-gray-500">Agency</th>
                             <th className="p-4 font-medium text-gray-500">Phone</th>
+                            <th className="p-4 font-medium text-gray-500">Type / Plan</th>
                             <th className="p-4 font-medium text-gray-500">Status</th>
                             <th className="p-4 font-medium text-gray-500">Docs</th>
                             <th className="p-4 font-medium text-gray-500">Actions</th>
@@ -101,11 +104,19 @@ export default async function ManageAgents() {
                     <tbody className="divide-y">
                         {agentsWithProofUrls?.map((agent: AgentProfile & { proofUrls?: { name: string, url: string }[] }) => {
                             const status = agent.verification_status || (agent.is_verified ? "verified" : "unverified");
+                            const typeLabel = agent.role || "unknown";
+                            const tier = agent.subscription_tier || "starter";
                             return (
                                 <tr key={agent.id} className="hover:bg-gray-50 align-top">
                                     <td className="p-4 font-medium">{agent.full_name || "N/A"}</td>
                                     <td className="p-4">{agent.agency_name || "N/A"}</td>
                                     <td className="p-4">{agent.phone_number || "N/A"}</td>
+                                    <td className="p-4 space-y-1">
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 capitalize">
+                                            {typeLabel}
+                                        </span>
+                                        <span className="block text-xs text-gray-500 capitalize">Plan: {tier}</span>
+                                    </td>
                                     <td className="p-4">
                                         {status === "verified" ? (
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
