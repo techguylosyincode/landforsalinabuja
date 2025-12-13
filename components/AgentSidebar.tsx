@@ -33,17 +33,16 @@ export default function AgentSidebar() {
     const handleLogout = async () => {
         try {
             setLoggingOut(true);
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                console.error("Logout error:", error);
-                return;
+            const res = await fetch("/api/logout", { method: "POST" });
+            if (!res.ok) {
+                console.error("Logout error:", await res.text());
             }
-            router.push("/login");
-            router.refresh();
         } catch (err) {
             console.error("Logout failed:", err);
         } finally {
             setLoggingOut(false);
+            // Hard redirect to clear all client-side state
+            window.location.href = "/login?logged_out=1";
         }
     };
 

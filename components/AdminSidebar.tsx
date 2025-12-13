@@ -25,16 +25,16 @@ export default function AdminSidebar() {
     const handleLogout = async () => {
         try {
             setLoggingOut(true);
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                console.error("Logout error:", error);
+            // Call server-side logout to clear httpOnly cookies
+            const res = await fetch("/api/logout", { method: "POST" });
+            if (!res.ok) {
+                console.error("Logout error:", await res.text());
             }
-            // Hard reload to clear any cached state/cookies
-            window.location.href = "/login?logged_out=1";
         } catch (err) {
             console.error("Logout failed:", err);
         } finally {
             setLoggingOut(false);
+            window.location.href = "/login?logged_out=1";
         }
     };
 
