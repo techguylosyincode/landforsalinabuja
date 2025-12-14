@@ -118,6 +118,13 @@ export default function AddListingPage() {
         }));
     }, [locations, landTypes, estates, formData.location_id, formData.land_type_id, formData.estate_id, formData.size, formData.price, formData.title_type, formData.address, formData.features]);
 
+    // Auto-fill SEO when key fields are available
+    useEffect(() => {
+        if (formData.location_id && formData.land_type_id && formData.size) {
+            generateSeoSuggestions();
+        }
+    }, [formData.location_id, formData.land_type_id, formData.size, generateSeoSuggestions]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         // Handle checkboxes
