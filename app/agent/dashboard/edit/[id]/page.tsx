@@ -28,7 +28,7 @@ export default function EditListingPage() {
         address: "",
         size: "",
         title_type: "C_of_O",
-        image_url: "",
+        images: [] as string[],
         features: "", // Comma separated
         meta_title: "",
         meta_description: "",
@@ -84,7 +84,7 @@ export default function EditListingPage() {
                 address: data.address || "",
                 size: data.size_sqm?.toString() || "",
                 title_type: data.title_type || "C_of_O",
-                image_url: data.images?.[0] || "",
+                images: Array.isArray(data.images) ? data.images : [],
                 features: data.features ? data.features.join(", ") : "",
                 meta_title: data.meta_title || "",
                 meta_description: data.meta_description || "",
@@ -108,24 +108,46 @@ export default function EditListingPage() {
 
         setUploading(true);
         setError(null);
-        const file = e.target.files[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
+        const files = Array.from(e.target.files);
+        const MAX_SIZE_MB = 3;
+
+        for (const file of files) {
+            if (!file.type.startsWith("image/")) {
+                setError("Please upload image files (jpg, png, webp).");
+                setUploading(false);
+                return;
+            }
+            if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+                setError(`Image ${file.name} is too large. Max size is ${MAX_SIZE_MB}MB.`);
+                setUploading(false);
+                return;
+            }
+        }
+
+        const supabase = createClient();
+        const uploaded: string[] = [];
 
         try {
-            const supabase = createClient();
-            const { error: uploadError } = await supabase.storage
-                .from('property-images')
-                .upload(filePath, file);
+            for (const file of files) {
+                const fileExt = file.name.split('.').pop();
+                const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+                const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}-${sanitizedName || `upload.${fileExt}`}`;
+                const filePath = `${fileName}`;
 
-            if (uploadError) throw uploadError;
+                const { error: uploadError } = await supabase.storage
+                    .from('property-images')
+                    .upload(filePath, file);
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('property-images')
-                .getPublicUrl(filePath);
+                if (uploadError) throw uploadError;
 
-            setFormData(prev => ({ ...prev, image_url: publicUrl }));
+                const { data: { publicUrl } } = supabase.storage
+                    .from('property-images')
+                    .getPublicUrl(filePath);
+
+                uploaded.push(publicUrl);
+            }
+
+            setFormData(prev => ({ ...prev, images: [...prev.images, ...uploaded] }));
         } catch (err: any) {
             console.error("Upload error:", err);
             setError("Failed to upload image. Please try again.");
@@ -156,7 +178,7 @@ export default function EditListingPage() {
                     address: formData.address,
                     size_sqm: parseFloat(formData.size),
                     title_type: formData.title_type,
-                    images: [formData.image_url || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop"],
+                    images: formData.images.length > 0 ? formData.images : ["https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop"],
                     features: featuresArray,
                     meta_title: formData.meta_title || formData.title,
                     meta_description: formData.meta_description || formData.description.substring(0, 150),
@@ -331,54 +353,64 @@ export default function EditListingPage() {
 
                         {/* Media Section */}
                         <div className="space-y-6">
-                            <h2 className="text-lg font-semibold border-b pb-2">Property Image</h2>
+                            <h2 className="text-lg font-semibold border-b pb-2">Property Images</h2>
 
                             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:bg-gray-50 transition-colors">
-                                {formData.image_url ? (
-                                    <div className="relative w-full h-64 rounded-lg overflow-hidden">
-                                        <Image
-                                            src={formData.image_url}
-                                            alt="Property preview"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData({ ...formData, image_url: "" })}
-                                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
-                                        >
-                                            <X className="w-4 h-4" />
-                                        </button>
+                                {formData.images && formData.images.length > 0 ? (
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                        {formData.images.map((url, idx) => (
+                                            <div key={url} className="relative h-32 rounded-lg overflow-hidden border">
+                                                <Image
+                                                    src={url}
+                                                    alt={`Property ${idx + 1}`}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            images: prev.images.filter((img) => img !== url)
+                                                        }))
+                                                    }
+                                                    className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ))}
                                     </div>
                                 ) : (
                                     <div className="flex flex-col items-center">
                                         <Upload className="h-12 w-12 text-gray-400 mb-4" />
                                         <p className="text-sm text-gray-600 mb-2">Click to upload or drag and drop</p>
                                         <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (max. 5MB)</p>
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            className="hidden"
-                                            accept="image/*"
-                                            onChange={handleImageUpload}
-                                        />
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            className="mt-4"
-                                            onClick={() => fileInputRef.current?.click()}
-                                            disabled={uploading}
-                                        >
-                                            {uploading ? (
-                                                <>
-                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Uploading...
-                                                </>
-                                            ) : (
-                                                "Select Image"
-                                            )}
-                                        </Button>
                                     </div>
                                 )}
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={handleImageUpload}
+                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="mt-4"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={uploading}
+                                >
+                                    {uploading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Uploading...
+                                        </>
+                                    ) : (
+                                        "Select Images"
+                                    )}
+                                </Button>
                             </div>
                         </div>
 
