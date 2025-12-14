@@ -16,6 +16,7 @@ export default function AddListingPage() {
     const [error, setError] = useState<string | null>(null);
     const [isPremium, setIsPremium] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
+    const [optionsLoading, setOptionsLoading] = useState(true);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Dropdown Data
@@ -26,37 +27,44 @@ export default function AddListingPage() {
     useEffect(() => {
         const fetchData = async () => {
             const supabase = createClient();
+            setOptionsLoading(true);
 
-            // Fetch User & Premium Status
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                const { data } = await supabase.from('profiles').select('subscription_tier, subscription_expiry, verification_status, is_verified').eq('id', user.id).single();
+            try {
+                // Fetch User & Premium Status
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    const { data } = await supabase.from('profiles').select('subscription_tier, subscription_expiry, verification_status, is_verified').eq('id', user.id).single();
 
-                // Treat expired as starter in the UI
-                const expiry = data?.subscription_expiry ? new Date(data.subscription_expiry) : null;
-                const effectiveTier = expiry && expiry.getTime() < Date.now() ? 'starter' : data?.subscription_tier;
+                    // Treat expired as starter in the UI
+                    const expiry = data?.subscription_expiry ? new Date(data.subscription_expiry) : null;
+                    const effectiveTier = expiry && expiry.getTime() < Date.now() ? 'starter' : data?.subscription_tier;
 
-                if (effectiveTier === 'premium' || effectiveTier === 'pro' || effectiveTier === 'agency') {
-                    setIsPremium(true);
-                } else {
-                    setIsPremium(false);
+                    if (effectiveTier === 'premium' || effectiveTier === 'pro' || effectiveTier === 'agency') {
+                        setIsPremium(true);
+                    } else {
+                        setIsPremium(false);
+                    }
+
+                    if (data?.verification_status === "verified" || data?.is_verified) {
+                        setIsVerified(true);
+                    } else {
+                        setIsVerified(false);
+                    }
                 }
 
-                if (data?.verification_status === "verified" || data?.is_verified) {
-                    setIsVerified(true);
-                } else {
-                    setIsVerified(false);
-                }
+                // Fetch Dropdowns
+                const { data: locs } = await supabase.from('locations').select('id, name').order('name');
+                const { data: types } = await supabase.from('land_types').select('id, name').order('name');
+                const { data: ests } = await supabase.from('estates').select('id, name').order('name');
+
+                if (locs) setLocations(locs);
+                if (types) setLandTypes(types);
+                if (ests) setEstates(ests);
+            } catch (err) {
+                console.error("Error loading dropdown data", err);
+            } finally {
+                setOptionsLoading(false);
             }
-
-            // Fetch Dropdowns
-            const { data: locs } = await supabase.from('locations').select('id, name').order('name');
-            const { data: types } = await supabase.from('land_types').select('id, name').order('name');
-            const { data: ests } = await supabase.from('estates').select('id, name').order('name');
-
-            if (locs) setLocations(locs);
-            if (types) setLandTypes(types);
-            if (ests) setEstates(ests);
         };
         fetchData();
     }, []);
@@ -117,6 +125,16 @@ export default function AddListingPage() {
             description: prev.description || suggestedDescription
         }));
     }, [locations, landTypes, estates, formData.location_id, formData.land_type_id, formData.estate_id, formData.size, formData.price, formData.title_type, formData.address, formData.features]);
+
+    const handleGenerateClick = () => {
+        // Ensure required fields exist before attempting auto-fill
+        if (!formData.location_id || !formData.land_type_id || !formData.size) {
+            setError("Select a location, land type, and enter size before auto-generating SEO.");
+            return;
+        }
+        setError(null);
+        generateSeoSuggestions();
+    };
 
     // Auto-fill SEO when key fields are available
     useEffect(() => {
@@ -385,10 +403,11 @@ export default function AddListingPage() {
                                         name="location_id"
                                         className="w-full rounded-md border border-gray-200 p-2.5 bg-white"
                                         required
+                                        disabled={optionsLoading}
                                         value={formData.location_id}
                                         onChange={handleChange}
                                     >
-                                        <option value="">Select Location</option>
+                                        <option value="">{optionsLoading ? "Loading locations..." : "Select Location"}</option>
                                         {locations.map(loc => (
                                             <option key={loc.id} value={loc.id}>{loc.name}</option>
                                         ))}
@@ -400,10 +419,11 @@ export default function AddListingPage() {
                                         name="land_type_id"
                                         className="w-full rounded-md border border-gray-200 p-2.5 bg-white"
                                         required
+                                        disabled={optionsLoading}
                                         value={formData.land_type_id}
                                         onChange={handleChange}
                                     >
-                                        <option value="">Select Type</option>
+                                        <option value="">{optionsLoading ? "Loading land types..." : "Select Type"}</option>
                                         {landTypes.map(type => (
                                             <option key={type.id} value={type.id}>{type.name}</option>
                                         ))}
@@ -541,7 +561,7 @@ export default function AddListingPage() {
                                     type="button"
                                     variant="outline"
                                     size="sm"
-                                    onClick={generateSeoSuggestions}
+                                    onClick={handleGenerateClick}
                                     className="gap-1"
                                 >
                                     <Sparkles className="h-4 w-4" />
