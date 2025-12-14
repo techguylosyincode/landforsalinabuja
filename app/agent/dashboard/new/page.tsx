@@ -210,10 +210,15 @@ export default function AddListingPage() {
         e.preventDefault();
         setLoading(true);
         setError(null);
+        // Safety: force-stop spinner after 20s if something hangs
+        const timeout = setTimeout(() => {
+            setLoading(false);
+            setError((prev) => prev || "Request is taking too long. Please check your connection and try again.");
+        }, 20000);
 
         try {
-        const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
+            const supabase = createClient();
+            const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
             setError("You must be logged in to post a property.");
@@ -349,10 +354,13 @@ export default function AddListingPage() {
                 focus_keyword: finalFocusKeyword,
                 is_featured: isPaid ? formData.is_featured : false,
                 is_distressed: formData.is_distressed,
-                has_foundation: formData.has_foundation
-            });
+            has_foundation: formData.has_foundation
+        });
 
-            if (insertError) throw insertError;
+            if (insertError) {
+                console.error("Insert listing error:", insertError);
+                throw insertError;
+            }
 
             if (initialStatus === 'pending') {
                 alert(isVerified ? "Listing submitted! It is pending approval for your plan." : "Listing submitted! It will stay pending until verification/upgrade.");
@@ -366,6 +374,7 @@ export default function AddListingPage() {
             console.error("Error creating listing:", err);
             setError(err.message || "Failed to create listing.");
         } finally {
+            clearTimeout(timeout);
             setLoading(false);
         }
     };
