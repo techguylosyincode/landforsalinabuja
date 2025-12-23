@@ -4,3 +4,4 @@
 -- Since "Public profiles are viewable by everyone" already exists, this admin policy is redundant and dangerous.
 
 DROP POLICY IF EXISTS "Admins can view all profiles" ON profiles;
+ 

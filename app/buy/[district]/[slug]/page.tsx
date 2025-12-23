@@ -5,6 +5,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+type ProfileData = {
+  full_name: string | null;
+  phone_number: string | null;
+  agency_name: string | null;
+  is_verified: boolean | null;
+};
+
 type Property = {
   id: string;
   title: string;
@@ -18,17 +25,12 @@ type Property = {
   features: string[];
   meta_title?: string | null;
   meta_description?: string | null;
-  profiles?: {
-    full_name: string | null;
-    phone_number: string | null;
-    agency_name: string | null;
-    is_verified: boolean | null;
-  } | null;
+  profiles?: ProfileData | null;
 };
 
 export const revalidate = 300;
 
-async function fetchProperty(slug: string) {
+async function fetchProperty(slug: string): Promise<Property | null> {
   try {
     const supabase = await createClient();
     const slugBase = slug.replace(/-[0-9]+$/, ""); // strip numeric suffix if present
@@ -75,11 +77,19 @@ async function fetchProperty(slug: string) {
 
       if (altError) {
         console.error("fetchProperty fallback error:", altError);
+        return null;
       }
-      return alt as Property | null;
+
+      if (!alt) return null;
+
+      // Handle profiles - Supabase returns array for joins
+      const profileData = Array.isArray(alt.profiles) ? alt.profiles[0] : alt.profiles;
+      return { ...alt, profiles: profileData || null } as Property;
     }
 
-    return data as Property | null;
+    // Handle profiles - Supabase returns array for joins
+    const profileData = Array.isArray(data.profiles) ? data.profiles[0] : data.profiles;
+    return { ...data, profiles: profileData || null } as Property;
   } catch (e) {
     console.error("fetchProperty error:", e);
     return null;
