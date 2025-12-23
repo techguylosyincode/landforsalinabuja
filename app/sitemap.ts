@@ -1,10 +1,13 @@
 import { MetadataRoute } from 'next';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@supabase/supabase-js';
 
 const BASE_URL = 'https://landforsaleinabuja.ng';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const supabase = createClient();
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
     // Fetch all active properties
     const { data: properties } = await supabase
