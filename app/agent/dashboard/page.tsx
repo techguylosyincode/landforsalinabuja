@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import ListingQuotaDisplay from "@/components/ListingQuotaDisplay";
 
 const BoostButton = dynamic(() => import("@/components/BoostButton"), { ssr: false });
 
@@ -21,11 +22,50 @@ type Property = {
     featured_until?: string;
 };
 
+type UserProfile = {
+    subscription_tier?: string;
+    subscription_expiry?: string | null;
+    role?: string;
+};
+
 export default function AgentDashboard() {
     const [listings, setListings] = useState<Property[]>([]);
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<any>(null);
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [deleting, setDeleting] = useState<string | null>(null);
     const router = useRouter();
+
+    const handleDeleteListing = async (propertyId: string, propertyTitle: string) => {
+        if (!confirm(`Are you sure you want to delete "${propertyTitle}"? This action cannot be undone.`)) {
+            return;
+        }
+
+        setDeleting(propertyId);
+        try {
+            const supabase = createClient();
+            const { error } = await supabase
+                .from('properties')
+                .delete()
+                .eq('id', propertyId)
+                .eq('agent_id', user.id);
+
+            if (error) {
+                console.error("Delete error:", error);
+                alert("Failed to delete listing. Please try again.");
+                return;
+            }
+
+            // Remove from local state
+            setListings(prev => prev.filter(l => l.id !== propertyId));
+            alert("Listing deleted successfully!");
+        } catch (err) {
+            console.error("Error deleting listing:", err);
+            alert("An error occurred while deleting the listing.");
+        } finally {
+            setDeleting(null);
+        }
+    };
 
     useEffect(() => {
         let isMounted = true;
@@ -44,6 +84,17 @@ export default function AgentDashboard() {
                 }
 
                 if (isMounted) setUser(user);
+
+                // Fetch user profile for subscription info
+                const { data: profileData } = await supabase
+                    .from('profiles')
+                    .select('subscription_tier, subscription_expiry, role')
+                    .eq('id', user.id)
+                    .maybeSingle();
+
+                if (isMounted && profileData) {
+                    setProfile(profileData);
+                }
 
                 const { data, error } = await supabase
                     .from('properties')
@@ -100,14 +151,14 @@ export default function AgentDashboard() {
                 </div>
 
                 {/* Stats Overview */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-lg shadow-sm border">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="font-medium text-gray-500">Active Listings</h3>
                             <List className="h-5 w-5 text-primary" />
                         </div>
-                        <div className="text-3xl font-bold">{listings.length}</div>
-                        <p className="text-xs text-green-600 mt-1">Total properties posted</p>
+                        <div className="text-3xl font-bold">{listings.filter(l => l.status === 'active').length}</div>
+                        <p className="text-xs text-green-600 mt-1">Currently listed</p>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-sm border">
                         <div className="flex items-center justify-between mb-4">
@@ -125,6 +176,15 @@ export default function AgentDashboard() {
                         <div className="text-3xl font-bold">0</div>
                         <p className="text-xs text-gray-500 mt-1">Check your email for leads</p>
                     </div>
+                    {profile && (
+                        <ListingQuotaDisplay
+                            activeListingsCount={listings.filter(l => l.status === 'active').length}
+                            subscriptionTier={profile.subscription_tier || 'starter'}
+                            subscriptionExpiry={profile.subscription_expiry}
+                            role={profile.role}
+                            variant="card"
+                        />
+                    )}
                 </div>
 
                 {/* Recent Listings Table */}
@@ -194,7 +254,13 @@ export default function AgentDashboard() {
                                                                 }}
                                                             />
                                                         )}
-                                                        <Button size="sm" variant="outline" className="h-8 w-8 p-0 text-red-500 hover:text-red-700">
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            className="h-8 w-8 p-0 text-red-500 hover:text-red-700"
+                                                            onClick={() => handleDeleteListing(listing.id, listing.title)}
+                                                            disabled={deleting === listing.id}
+                                                        >
                                                             <Trash2 className="h-4 w-4" />
                                                         </Button>
                                                     </div>

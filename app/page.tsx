@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, MapPin, CheckCircle, TrendingUp, ShieldCheck, Users, ArrowRight } from "lucide-react";
+import { CheckCircle, ShieldCheck, Users, ArrowRight, TrendingUp, MapPin } from "lucide-react";
 import PropertyCard from "@/components/PropertyCard";
+import HeroSearchForm from "@/components/HeroSearchForm";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -23,9 +23,11 @@ export const revalidate = 300;
 
 export default async function Home() {
   const supabase = await createClient();
+  const now = new Date().toISOString();
   const { data } = await supabase
     .from('properties')
-    .select('id, title, price, size_sqm, district, images, title_type, slug')
+    .select('id, title, price, size_sqm, district, images, title_type, slug, is_featured, featured_until')
+    .or(`is_featured.eq.false,and(is_featured.eq.true,featured_until.gt.${now})`)
     .order('is_featured', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(3);
@@ -69,29 +71,7 @@ export default async function Home() {
           </p>
 
           {/* Search Bar */}
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 max-w-4xl mx-auto shadow-2xl">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative group">
-                <MapPin className="absolute left-4 top-3.5 h-5 w-5 text-gray-300 group-focus-within:text-secondary transition-colors" />
-                <input
-                  type="text"
-                  placeholder="Where do you want to buy? (e.g., Guzape)"
-                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary focus:bg-white/20 transition-all"
-                />
-              </div>
-              <div className="w-full md:w-48 relative group">
-                <TrendingUp className="absolute left-4 top-3.5 h-5 w-5 text-gray-300 group-focus-within:text-secondary transition-colors" />
-                <input
-                  type="number"
-                  placeholder="Max Price (₦)"
-                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary focus:bg-white/20 transition-all"
-                />
-              </div>
-              <Button size="lg" className="md:w-auto w-full h-auto py-3 text-lg font-bold bg-secondary text-primary hover:bg-secondary/90 shadow-lg hover:shadow-secondary/20">
-                <Search className="mr-2 h-5 w-5" /> Search Land
-              </Button>
-            </div>
-          </div>
+          <HeroSearchForm />
 
           <div className="flex items-center justify-center gap-8 text-sm text-gray-300 pt-4">
             <div className="flex items-center gap-2">

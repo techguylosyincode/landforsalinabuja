@@ -8,6 +8,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
+import ListingQuotaDisplay from "@/components/ListingQuotaDisplay";
+import { LISTING_LIMITS } from "@/lib/constants/subscription";
+import { getFeaturedLimit, canFeatureListing, rotateFeatureListing, getFeaturedUntilDate } from "@/lib/utils/featured";
 
 export default function AddListingPage() {
     const router = useRouter();
@@ -17,6 +20,10 @@ export default function AddListingPage() {
     const [isPremium, setIsPremium] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
     const [optionsLoading, setOptionsLoading] = useState(true);
+    const [profile, setProfile] = useState<any>(null);
+    const [activeListingsCount, setActiveListingsCount] = useState(0);
+    const [canFeature, setCanFeature] = useState(false);
+    const [wantsFeatured, setWantsFeatured] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Dropdown Data
@@ -33,7 +40,11 @@ export default function AddListingPage() {
                 // Fetch User & Premium Status
                 const { data: { user } } = await supabase.auth.getUser();
                 if (user) {
-                    const { data } = await supabase.from('profiles').select('subscription_tier, subscription_expiry, verification_status, is_verified').eq('id', user.id).single();
+                    const { data } = await supabase.from('profiles').select('subscription_tier, subscription_expiry, verification_status, is_verified, role').eq('id', user.id).single();
+
+                    if (data) {
+                        setProfile(data);
+                    }
 
                     // Treat expired as starter in the UI
                     const expiry = data?.subscription_expiry ? new Date(data.subscription_expiry) : null;
@@ -45,10 +56,25 @@ export default function AddListingPage() {
                         setIsPremium(false);
                     }
 
+                    // Check if user can feature listings
+                    const featuredLimit = getFeaturedLimit(effectiveTier || 'starter');
+                    setCanFeature(featuredLimit > 0);
+
                     if (data?.verification_status === "verified" || data?.is_verified) {
                         setIsVerified(true);
                     } else {
                         setIsVerified(false);
+                    }
+
+                    // Fetch active listings count
+                    const { data: propertiesData } = await supabase
+                        .from('properties')
+                        .select('id', { count: 'exact', head: true })
+                        .eq('agent_id', user.id)
+                        .eq('status', 'active');
+
+                    if (propertiesData) {
+                        setActiveListingsCount(propertiesData.length || 0);
                     }
                 }
 
@@ -264,21 +290,29 @@ export default function AddListingPage() {
         }
 
             // 1. Check Limits & Set Status (respect expiry)
-            const { data: profile } = await supabase.from('profiles').select('subscription_tier, subscription_expiry').eq('id', user.id).single();
-            const expiry = profile?.subscription_expiry ? new Date(profile.subscription_expiry) : null;
-            const tier = expiry && expiry.getTime() < Date.now() ? 'starter' : (profile?.subscription_tier || 'starter');
+            const { data: profileData } = await supabase.from('profiles').select('subscription_tier, subscription_expiry').eq('id', user.id).single();
+            const expiry = profileData?.subscription_expiry ? new Date(profileData.subscription_expiry) : null;
+            const tier = expiry && expiry.getTime() < Date.now() ? 'starter' : (profileData?.subscription_tier || 'starter');
 
-            // Define listing limits per tier
-            const LISTING_LIMITS: Record<string, number> = {
-                'starter': 1,
-                'free': 1,
-                'pro': 5,
-                'premium': 5,
-                'agency': -1 // unlimited
-            };
-
-            const limit = LISTING_LIMITS[tier] ?? 1;
+            const limit = LISTING_LIMITS[tier as keyof typeof LISTING_LIMITS] ?? 1;
             const isPaid = tier === 'premium' || tier === 'pro' || tier === 'agency';
+
+            // Handle featured listing
+            let isFeatured = false;
+            let featuredUntil = null;
+
+            if (wantsFeatured && canFeature) {
+                // Check if user can feature (double-check limit)
+                const canFeatureNow = await canFeatureListing(user.id, tier);
+
+                if (canFeatureNow) {
+                    // Rotate old featured listings for pro tier
+                    await rotateFeatureListing(user.id, tier);
+
+                    isFeatured = true;
+                    featuredUntil = getFeaturedUntilDate();
+                }
+            }
 
             // Check active listings count (skip for unlimited tiers)
             if (limit > 0) {
@@ -352,7 +386,8 @@ export default function AddListingPage() {
                 meta_title: finalMetaTitle,
                 meta_description: finalMetaDescription,
                 focus_keyword: finalFocusKeyword,
-                is_featured: isPaid ? formData.is_featured : false,
+                is_featured: isFeatured,
+                featured_until: featuredUntil,
                 is_distressed: formData.is_distressed,
             has_foundation: formData.has_foundation
         });
@@ -393,6 +428,18 @@ export default function AddListingPage() {
                         <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 flex items-center gap-2">
                             <AlertCircle className="h-5 w-5" />
                             <span>{error}</span>
+                        </div>
+                    )}
+
+                    {profile && (
+                        <div className="mb-6">
+                            <ListingQuotaDisplay
+                                activeListingsCount={activeListingsCount}
+                                subscriptionTier={profile.subscription_tier || 'starter'}
+                                subscriptionExpiry={profile.subscription_expiry}
+                                role={profile.role}
+                                variant="banner"
+                            />
                         </div>
                     )}
 
@@ -562,6 +609,24 @@ export default function AddListingPage() {
                                     />
                                     <span className="text-sm text-gray-700">Has Foundation / Unfinished Building</span>
                                 </label>
+                                {canFeature && (
+                                    <label className="flex items-center space-x-2 pt-2 border-t mt-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={wantsFeatured}
+                                            onChange={(e) => setWantsFeatured(e.target.checked)}
+                                            className="h-4 w-4 rounded border-gray-300 text-primary"
+                                        />
+                                        <div className="flex-1">
+                                            <span className="text-sm font-medium text-gray-700">Feature this listing on homepage (FREE)</span>
+                                            <p className="text-xs text-gray-500 mt-0.5">
+                                                Your listing will be highlighted for 24 hours.
+                                                {profile?.subscription_tier === 'pro' && ' You can only feature 1 listing at a time on your Pro plan.'}
+                                                {profile?.subscription_tier === 'agency' && ' You can feature unlimited listings on your Agency plan.'}
+                                            </p>
+                                        </div>
+                                    </label>
+                                )}
                             </div>
                         </div>
 

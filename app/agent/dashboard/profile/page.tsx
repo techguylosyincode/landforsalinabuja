@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User, Building2, Phone, BadgeCheck, AlertCircle, Loader2 } from "lucide-react";
+import ListingQuotaDisplay from "@/components/ListingQuotaDisplay";
 
 export default function AgentProfilePage() {
     const [loading, setLoading] = useState(true);
@@ -15,6 +16,7 @@ export default function AgentProfilePage() {
     const [profile, setProfile] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [verificationMessage, setVerificationMessage] = useState<string | null>(null);
+    const [activeListingsCount, setActiveListingsCount] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -75,6 +77,17 @@ export default function AgentProfilePage() {
                     if (isMounted) setProfile(createdProfile);
                 } else {
                     if (isMounted) setProfile(data);
+                }
+
+                // Fetch active listings count
+                const { data: propertiesData } = await supabase
+                    .from('properties')
+                    .select('id', { count: 'exact', head: true })
+                    .eq('agent_id', user.id)
+                    .eq('status', 'active');
+
+                if (isMounted && propertiesData) {
+                    setActiveListingsCount(propertiesData.length || 0);
                 }
             } catch (err) {
                 setError("An unexpected error occurred");
@@ -402,16 +415,14 @@ export default function AgentProfilePage() {
                         )}
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl shadow-sm border">
-                        <h2 className="text-lg font-semibold mb-4">Subscription</h2>
-                        <div className="mb-4">
-                            <span className="text-sm text-gray-500">Current Plan:</span>
-                            <div className="font-bold text-xl capitalize">{profile?.subscription_tier || 'Free'}</div>
-                        </div>
-                        <Button variant="outline" className="w-full" asChild>
-                            <a href="/pricing">Upgrade Plan</a>
-                        </Button>
-                    </div>
+                    <ListingQuotaDisplay
+                        activeListingsCount={activeListingsCount}
+                        subscriptionTier={profile?.subscription_tier || 'starter'}
+                        subscriptionExpiry={profile?.subscription_expiry}
+                        role={profile?.role}
+                        variant="card"
+                        showUpgradeButton={true}
+                    />
                 </div>
             </div>
         </main>

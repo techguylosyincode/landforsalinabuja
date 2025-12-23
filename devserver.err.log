@@ -1,0 +1,543 @@
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+ ⚠ Fast Refresh had to perform a full reload when ./node_modules/next/dist/client/image-component.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload when ./node_modules/next/dist/client/image-component.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload when ./node_modules/next/dist/client/image-component.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+ ⚠ Fast Refresh had to perform a full reload when ./node_modules/next/dist/client/image-component.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload when ./node_modules/next/dist/client/image-component.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload when ./node_modules/next/dist/client/image-component.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Module [project]/node_modules/next/dist/esm/lib/framework/boundary-components.js [app-ssr] (ecmascript) was instantiated because it was required from module [project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/admin/listings/page { GLOBAL_ERROR_MODULE => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", METADATA_0 => "[project]/app/favicon.ico.mjs { IMAGE => \"[project]/app/favicon.ico (static in ecmascript, tag client)\" } [app-rsc] (structured image object, ecmascript, Next.js Server Component)", MODULE_1 => "[project]/app/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_2 => "[project]/node_modules/next/dist/client/components/builtin/not-found.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_3 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_4 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_5 => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_6 => "[project]/app/admin/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_7 => "[project]/app/admin/listings/page.tsx [app-rsc] (ecmascript, Next.js Server Component)" } [app-rsc] (ecmascript) <locals>, but the module factory is not available.
+    at instantiateModule (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[turbopack]_runtime.js:707:15)
+    at getOrInstantiateModuleFromParent (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[turbopack]_runtime.js:738:12)
+    at Context.commonJsRequire [as r] (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[turbopack]_runtime.js:249:12) {
+  digest: '3098110012'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove={function onApprove} onReject=...>
+                                ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '1086796171'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... agents={[...]} onApprove=... onReject={function onReject}>
+                                             ^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2794214219'
+}
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:210:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:196:72)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\node_modules_473cc24e._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/buy/[district]/[slug]" used `params.district`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PropertyDetailsPage (C:\Users\user\Desktop\Antigravity\landforsaleinabuja\.next\dev\server\chunks\ssr\[root-of-the-server]__fffab131._.js:283:54)

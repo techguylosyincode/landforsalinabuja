@@ -86,14 +86,15 @@ async function fetchProperty(slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string; district: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string; district: string }> }) {
   try {
-    const property = await fetchProperty(decodeURIComponent(params.slug || ""));
+    const { slug, district } = await params;
+    const property = await fetchProperty(decodeURIComponent(slug || ""));
     if (!property) return {};
     const title = property.meta_title || `${property.title} | LandForSaleInAbuja.ng`;
     const desc =
       property.meta_description ||
-      `${property.title} - ${property.size_sqm}sqm in ${property.district}. ${property.description?.slice(0, 150)}`;
+      `${property.title} - ${property.size_sqm}sqm in ${district}. ${property.description?.slice(0, 150)}`;
     return {
       title,
       description: desc,
@@ -103,18 +104,19 @@ export async function generateMetadata({ params }: { params: { slug: string; dis
   }
 }
 
-export default async function PropertyDetailsPage({ params }: { params: { district: string; slug: string } }) {
+export default async function PropertyDetailsPage({ params }: { params: Promise<{ district: string; slug: string }> }) {
   try {
-    const property = await fetchProperty(decodeURIComponent(params.slug || ""));
+    const { slug, district } = await params;
+    const property = await fetchProperty(decodeURIComponent(slug || ""));
     if (!property) notFound();
 
     const agent = property.profiles
       ? {
-          name: property.profiles.full_name || "Agent",
-          phone: property.profiles.phone_number || "",
-          agency: property.profiles.agency_name || "Independent Agent",
-          verified: property.profiles.is_verified || false,
-        }
+        name: property.profiles.full_name || "Agent",
+        phone: property.profiles.phone_number || "",
+        agency: property.profiles.agency_name || "Independent Agent",
+        verified: property.profiles.is_verified || false,
+      }
       : null;
 
     const image =

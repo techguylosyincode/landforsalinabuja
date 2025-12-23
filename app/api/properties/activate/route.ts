@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { LISTING_LIMITS } from "@/lib/constants/subscription";
 
 /**
  * Server-side activation guard.
@@ -31,14 +32,7 @@ export async function POST(req: Request) {
         const tierExpired = expiry && expiry.getTime() < Date.now();
         const tier = tierExpired ? "starter" : profile.subscription_tier || "starter";
 
-        const LISTING_LIMITS: Record<string, number> = {
-            starter: 1,
-            free: 1,
-            pro: 5,
-            premium: 5,
-            agency: -1,
-        };
-        const limit = LISTING_LIMITS[tier] ?? 1;
+        const limit = LISTING_LIMITS[tier as keyof typeof LISTING_LIMITS] ?? 1;
 
         if (limit > 0) {
             const { count, error: countError } = await supabase

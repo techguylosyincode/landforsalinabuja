@@ -18,8 +18,9 @@ type Property = {
 
 export const revalidate = 300;
 
-export default async function DistrictPage({ params }: { params: { district: string } }) {
-    const districtName = params.district;
+export default async function DistrictPage({ params }: { params: Promise<{ district: string }> }) {
+    const { district } = await params;
+    const districtName = district;
 
     const supabase = await createClient();
     const { data } = await supabase
