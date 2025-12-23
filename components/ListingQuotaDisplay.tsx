@@ -56,6 +56,7 @@ export default function ListingQuotaDisplay({
       expiringSoon,
       expiryText,
       isUnlimited: limit === -1,
+      subscriptionTier,
     };
   }, [activeListingsCount, subscriptionTier, subscriptionExpiry]);
 
