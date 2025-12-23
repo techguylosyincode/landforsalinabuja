@@ -26,6 +26,7 @@ type Property = {
   meta_title?: string | null;
   meta_description?: string | null;
   profiles?: ProfileData | null;
+  slug: string;
 };
 
 export const revalidate = 300;
@@ -44,7 +45,7 @@ async function fetchProperty(slug: string): Promise<Property | null> {
     const { data, error } = await supabase
       .from("properties")
       .select(
-        "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, profiles (full_name, phone_number, agency_name, is_verified)"
+        "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, slug, profiles (full_name, phone_number, agency_name, is_verified)"
       )
       .or(primaryClauses.join(","))
       .limit(1)
@@ -68,7 +69,7 @@ async function fetchProperty(slug: string): Promise<Property | null> {
       const { data: alt, error: altError } = await supabase
         .from("properties")
         .select(
-          "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, profiles (full_name, phone_number, agency_name, is_verified)"
+          "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, slug, profiles (full_name, phone_number, agency_name, is_verified)"
         )
         .or(fallbackClauses.join(","))
         .order("created_at", { ascending: false })
