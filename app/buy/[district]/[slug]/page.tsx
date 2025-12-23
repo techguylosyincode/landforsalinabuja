@@ -168,7 +168,7 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
             <Link href="/buy" className="hover:text-primary">
               Buy
             </Link>{" "}
-            &gt; <span className="capitalize">{params.district}</span> &gt;{" "}
+            &gt; <span className="capitalize">{district}</span> &gt;{" "}
             <span className="text-gray-900">{property.title}</span>
           </div>
 
