@@ -1,6 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import BuyPageClient from "./BuyPageClient";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Search Land for Sale in Abuja | Filter by District & Price",
+    description: "Search for land in Abuja by district, price, size, and title type. Find the perfect plot in Maitama, Asokoro, Guzape, and more.",
+};
+
 // Server Component - fetches data on the server
 export default async function BuyPage({
     searchParams,

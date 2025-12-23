@@ -1,12 +1,9 @@
-"use client"; // Make it a client component for simplicity in this demo
-
-"use client";
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 type BlogPost = {
     id: string;
@@ -16,39 +13,50 @@ type BlogPost = {
     created_at: string;
     category: string;
     author_name: string;
+    image_url?: string;
+    excerpt?: string;
 };
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-    const [post, setPost] = useState<BlogPost | null>(null);
-    const [loading, setLoading] = useState(true);
+export const revalidate = 3600; // Revalidate every hour
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            const supabase = createClient();
-            const { data, error } = await supabase
-                .from('blog_posts')
-                .select('*')
-                .eq('slug', params.slug)
-                .single();
+async function fetchPost(slug: string): Promise<BlogPost | null> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('slug', slug)
+        .single();
 
-            if (data) {
-                setPost(data);
-            }
-            setLoading(false);
-        };
+    if (error || !data) return null;
+    return data as BlogPost;
+}
 
-        fetchPost();
-    }, [params.slug]);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const post = await fetchPost(slug);
 
-    if (loading) return <div className="min-h-screen pt-20 text-center">Loading article...</div>;
+    if (!post) return {};
+
+    return {
+        title: `${post.title} | LandForSaleInAbuja.ng`,
+        description: post.excerpt || post.content.substring(0, 160),
+        openGraph: {
+            title: post.title,
+            description: post.excerpt || post.content.substring(0, 160),
+            type: 'article',
+            publishedTime: post.created_at,
+            authors: [post.author_name || 'Admin'],
+            images: post.image_url ? [post.image_url] : [],
+        },
+    };
+}
+
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const post = await fetchPost(slug);
 
     if (!post) {
-        return (
-            <div className="min-h-screen pt-20 text-center">
-                <h1 className="text-2xl font-bold">Article Not Found</h1>
-                <Button className="mt-4" asChild><Link href="/blog">Back to Blog</Link></Button>
-            </div>
-        );
+        notFound();
     }
 
     return (
@@ -60,7 +68,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
                 <header className="mb-8">
                     <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wide">
-                        {post.category}
+                        {post.category || 'Guide'}
                     </div>
                     <h1 className="text-4xl font-bold mb-4 text-gray-900">{post.title}</h1>
                     <div className="flex items-center text-gray-500 text-sm gap-4">
@@ -72,6 +80,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                         </div>
                     </div>
                 </header>
+
+                {post.image_url && (
+                    <div className="mb-8 rounded-xl overflow-hidden">
+                        <img src={post.image_url} alt={post.title} className="w-full h-auto object-cover" />
+                    </div>
+                )}
 
                 <div className="prose prose-lg max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: post.content }} />
 

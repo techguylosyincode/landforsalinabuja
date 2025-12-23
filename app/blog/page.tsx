@@ -1,41 +1,32 @@
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/server";
+import { Metadata } from "next";
 
-type BlogPost = {
-    id: string;
-    title: string;
-    excerpt: string;
-    slug: string;
-    created_at: string;
-    category: string;
-    image_url?: string;
+export const metadata: Metadata = {
+    title: "Abuja Land Authority | Guides & Market Insights",
+    description: "Expert guides, market insights, and verification tips for land buyers and investors in Abuja. Learn about C of O, R of O, and avoiding scams.",
 };
 
-export default function BlogPage() {
-    const [posts, setPosts] = useState<BlogPost[]>([]);
-    const [loading, setLoading] = useState(true);
+export const revalidate = 3600;
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const supabase = createClient();
-            const { data, error } = await supabase
-                .from('blog_posts')
-                .select('*')
-                .eq('published', true)
-                .order('created_at', { ascending: false });
+async function fetchPosts() {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
 
-            if (data) {
-                setPosts(data);
-            }
-            setLoading(false);
-        };
+    if (error) {
+        console.error("Error fetching posts:", error);
+        return [];
+    }
+    return data || [];
+}
 
-        fetchPosts();
-    }, []);
+export default async function BlogPage() {
+    const posts = await fetchPosts();
 
     return (
         <main className="min-h-screen bg-gray-50 py-12">
@@ -47,8 +38,10 @@ export default function BlogPage() {
                     </p>
                 </div>
 
-                {loading ? (
-                    <div className="text-center">Loading articles...</div>
+                {posts.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">
+                        No articles published yet. Check back soon!
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {posts.map((post) => (
@@ -63,13 +56,13 @@ export default function BlogPage() {
                                 </div>
                                 <div className="p-6">
                                     <div className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                                        {post.category}
+                                        {post.category || 'Article'}
                                     </div>
                                     <h2 className="text-xl font-bold mb-3 hover:text-primary transition-colors">
                                         <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                                     </h2>
                                     <p className="text-gray-600 mb-4 text-sm line-clamp-3">
-                                        {post.excerpt}
+                                        {post.excerpt || post.content?.substring(0, 150) + '...'}
                                     </p>
                                     <div className="flex items-center justify-between text-xs text-gray-400">
                                         <span>{new Date(post.created_at).toLocaleDateString()}</span>

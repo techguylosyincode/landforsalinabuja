@@ -143,7 +143,7 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
         "@type": "Product",
         name: `${property.title} - ${property.size_sqm}sqm in ${property.district}`,
       },
-      url: "",
+      url: `https://landforsaleinabuja.ng/buy/${property.district}/${property.slug}`,
       areaServed: property.district,
       category: "Land",
       availability: "https://schema.org/InStock",

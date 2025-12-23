@@ -7,6 +7,21 @@ import HeroSearchForm from "@/components/HeroSearchForm";
 
 import { createClient } from "@/lib/supabase/server";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Land for Sale in Abuja | Buy Verified Land with C of O",
+  description: "Find verified land for sale in Abuja. Browse listings in Maitama, Asokoro, Guzape, Wuse II, and more. Direct from owners and verified agents.",
+  openGraph: {
+    title: "Land for Sale in Abuja | Buy Verified Land",
+    description: "Find verified land for sale in Abuja. Browse listings in Maitama, Asokoro, Guzape, Wuse II, and more.",
+    url: "https://landforsaleinabuja.ng",
+    siteName: "LandForSaleInAbuja.ng",
+    locale: "en_NG",
+    type: "website",
+  },
+};
+
 // Define Property type matching PropertyCard props
 type Property = {
   id: string;
