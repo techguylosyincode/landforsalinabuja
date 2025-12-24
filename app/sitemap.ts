@@ -16,24 +16,7 @@ const DISTRICTS = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
-    // Fetch all active properties
-    const { data: properties } = await supabase
-        .from('properties')
-        .select('slug, district, created_at')
-        .eq('status', 'active');
-
-    // Fetch all blog posts
-    const { data: posts } = await supabase
-        .from('blog_posts')
-        .select('slug, created_at')
-        .eq('published', true);
-
-    // Static routes (high priority pages)
+    // Static routes (always included, even if DB fails)
     const staticRoutes = [
         { route: '', priority: 1.0, changeFrequency: 'daily' as const },
         { route: '/buy', priority: 0.9, changeFrequency: 'daily' as const },
@@ -47,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority,
     }));
 
-    // District landing pages (SEO Power-Up pages)
+    // District landing pages (always included)
     const districtRoutes = DISTRICTS.map((district) => ({
         url: `${BASE_URL}/buy/${district}`,
         lastModified: new Date(),
@@ -55,21 +38,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.85,
     }));
 
-    // Property routes
-    const propertyRoutes = (properties || []).map((property) => ({
-        url: `${BASE_URL}/buy/${property.district?.toLowerCase()}/${property.slug}`,
-        lastModified: new Date(property.created_at),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-    }));
+    let propertyRoutes: MetadataRoute.Sitemap = [];
+    let blogRoutes: MetadataRoute.Sitemap = [];
 
-    // Blog routes
-    const blogRoutes = (posts || []).map((post) => ({
-        url: `${BASE_URL}/blog/${post.slug}`,
-        lastModified: new Date(post.created_at),
-        changeFrequency: 'weekly' as const,
-        priority: 0.75,
-    }));
+    // Only fetch from DB if env vars are available
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (supabaseUrl && supabaseKey) {
+        try {
+            const supabase = createClient(supabaseUrl, supabaseKey);
+
+            // Fetch properties with timeout
+            const { data: properties } = await supabase
+                .from('properties')
+                .select('slug, district, created_at')
+                .eq('status', 'active')
+                .limit(500);
+
+            propertyRoutes = (properties || []).map((property) => ({
+                url: `${BASE_URL}/buy/${property.district?.toLowerCase() || 'abuja'}/${property.slug}`,
+                lastModified: new Date(property.created_at || Date.now()),
+                changeFrequency: 'weekly' as const,
+                priority: 0.7,
+            }));
+
+            // Fetch blog posts
+            const { data: posts } = await supabase
+                .from('blog_posts')
+                .select('slug, created_at')
+                .eq('published', true)
+                .limit(100);
+
+            blogRoutes = (posts || []).map((post) => ({
+                url: `${BASE_URL}/blog/${post.slug}`,
+                lastModified: new Date(post.created_at || Date.now()),
+                changeFrequency: 'weekly' as const,
+                priority: 0.75,
+            }));
+        } catch (error) {
+            console.error('Sitemap DB error:', error);
+            // Continue with static routes only
+        }
+    }
 
     return [...staticRoutes, ...districtRoutes, ...propertyRoutes, ...blogRoutes];
 }
