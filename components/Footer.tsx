@@ -23,10 +23,14 @@ export default function Footer() {
                 <div>
                     <h4 className="font-bold mb-4">Popular Areas</h4>
                     <ul className="space-y-2 text-sm text-gray-300">
-                        <li><Link href="/buy/maitama" className="hover:text-secondary">Maitama</Link></li>
-                        <li><Link href="/buy/guzape" className="hover:text-secondary">Guzape</Link></li>
-                        <li><Link href="/buy/lugbe" className="hover:text-secondary">Lugbe</Link></li>
-                        <li><Link href="/buy/katampe" className="hover:text-secondary">Katampe</Link></li>
+                        <li><Link href="/buy/maitama" className="hover:text-secondary">Land in Maitama</Link></li>
+                        <li><Link href="/buy/asokoro" className="hover:text-secondary">Land in Asokoro</Link></li>
+                        <li><Link href="/buy/guzape" className="hover:text-secondary">Land in Guzape</Link></li>
+                        <li><Link href="/buy/wuse-ii" className="hover:text-secondary">Land in Wuse II</Link></li>
+                        <li><Link href="/buy/gwarinpa" className="hover:text-secondary">Land in Gwarinpa</Link></li>
+                        <li><Link href="/buy/lugbe" className="hover:text-secondary">Land in Lugbe</Link></li>
+                        <li><Link href="/buy/katampe" className="hover:text-secondary">Land in Katampe</Link></li>
+                        <li><Link href="/buy/idu" className="hover:text-secondary">Land in Idu</Link></li>
                     </ul>
                 </div>
 

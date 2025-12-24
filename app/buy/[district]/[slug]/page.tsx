@@ -135,24 +135,45 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop";
     const ldJson = {
       "@context": "https://schema.org",
-      "@type": "Offer",
+      "@type": "RealEstateListing",
       name: property.title,
       description: property.description,
-      price: property.price,
-      priceCurrency: "NGN",
-      itemOffered: {
-        "@type": "Product",
-        name: `${property.title} - ${property.size_sqm}sqm in ${property.district}`,
-      },
       url: `https://landforsaleinabuja.ng/buy/${property.district}/${property.slug}`,
-      areaServed: property.district,
-      category: "Land",
-      availability: "https://schema.org/InStock",
-      seller: {
-        "@type": "Organization",
-        name: agent?.agency || "Agent",
-        telephone: agent?.phone || "",
+      datePosted: new Date().toISOString(),
+      image: image,
+      offers: {
+        "@type": "Offer",
+        price: property.price,
+        priceCurrency: "NGN",
+        availability: "https://schema.org/InStock",
+        seller: {
+          "@type": "RealEstateAgent",
+          name: agent?.agency || "LandForSaleInAbuja.ng",
+          telephone: agent?.phone || "",
+        },
       },
+      about: {
+        "@type": "Place",
+        name: `${property.district}, Abuja`,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: property.district,
+          addressRegion: "FCT",
+          addressCountry: "NG",
+        },
+      },
+      additionalProperty: [
+        {
+          "@type": "PropertyValue",
+          name: "Plot Size",
+          value: `${property.size_sqm} sqm`,
+        },
+        {
+          "@type": "PropertyValue",
+          name: "Title Type",
+          value: property.title_type,
+        },
+      ],
     };
 
     return (

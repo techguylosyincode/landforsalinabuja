@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --color-background: var(--background);
@@ -74,4 +75,73 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
+}
+
+/* Custom Typography for Blog Posts */
+.prose h2 {
+  font-size: 1.875rem;
+  /* 30px */
+  line-height: 2.25rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--foreground);
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+  /* 24px */
+  line-height: 2rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+  color: #374151;
+  /* gray-700 */
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose a {
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--muted-foreground);
+  margin-bottom: 1.25rem;
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }

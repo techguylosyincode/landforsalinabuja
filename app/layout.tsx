@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   title: "LandForSaleInAbuja.ng | Buy & Sell Land in Abuja",
   description: "The definitive marketplace for verified land sales in Abuja. Find plots in Maitama, Guzape, Lugbe, and more.",
+  verification: {
+    google: "18h-bh2z3ybNuU8Ck1y6xnCMjr5rfeG8XRxDJ8yZCqY",
+  },
 };
 
 export default function RootLayout({
