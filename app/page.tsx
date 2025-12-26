@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { CheckCircle, ShieldCheck, Users, ArrowRight, TrendingUp, MapPin } from "lucide-react";
-import PropertyCard from "@/components/PropertyCard";
+import FeaturedListings from "@/components/FeaturedListings";
 import HeroSearchForm from "@/components/HeroSearchForm";
 
 import { createClient } from "@/lib/supabase/server";
@@ -39,15 +39,24 @@ export const revalidate = 300;
 export default async function Home() {
   const supabase = await createClient();
   const now = new Date().toISOString();
+
+  // Fetch initial 30 properties
   const { data } = await supabase
     .from('properties')
     .select('id, title, price, size_sqm, district, images, title_type, slug, is_featured, featured_until')
     .or(`is_featured.eq.false,and(is_featured.eq.true,featured_until.gt.${now})`)
+    .eq('status', 'active')
     .order('is_featured', { ascending: false })
     .order('created_at', { ascending: false })
-    .limit(3);
+    .limit(30);
 
-  const featuredProperties: Property[] = (data || []).map((p: any) => ({
+  // Get total count for pagination
+  const { count } = await supabase
+    .from('properties')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'active');
+
+  const featuredProperties = (data || []).map((p: any) => ({
     id: p.id,
     title: p.title,
     price: p.price,
@@ -59,6 +68,46 @@ export default async function Home() {
   }));
   return (
     <main className="min-h-screen">
+      {/* Homepage JSON-LD Schema */}
+      <script type="application/ld+json" suppressHydrationWarning>
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": "https://landforsaleinabuja.ng/#website",
+              "url": "https://landforsaleinabuja.ng",
+              "name": "LandForSaleInAbuja.ng",
+              "description": "Find verified land for sale in Abuja. Browse listings in Maitama, Asokoro, Guzape, Lugbe, and more.",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://landforsaleinabuja.ng/buy?keyword={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            },
+            {
+              "@type": "RealEstateAgent",
+              "@id": "https://landforsaleinabuja.ng/#organization",
+              "name": "LandForSaleInAbuja.ng",
+              "url": "https://landforsaleinabuja.ng",
+              "logo": "https://landforsaleinabuja.ng/logo.png",
+              "description": "The #1 marketplace for verified land sales in Abuja, Nigeria. Find plots with C of O in Maitama, Guzape, Asokoro, Lugbe, and more.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Abuja",
+                "containedInPlace": {
+                  "@type": "Country",
+                  "name": "Nigeria"
+                }
+              },
+              "sameAs": [
+                "https://www.facebook.com/landforsaleinabuja",
+                "https://twitter.com/landinabuja"
+              ]
+            }
+          ]
+        })}
+      </script>
       {/* Hero Section */}
       <section className="relative h-[700px] flex items-center justify-center text-white overflow-hidden">
         {/* Background Image with Overlay */}
@@ -78,7 +127,7 @@ export default async function Home() {
             #1 Marketplace for Verified Land in Abuja
           </div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight">
-            Build Your Dream <br /> in <span className="text-secondary">Abuja's</span> Prime Districts
+            <span className="text-secondary">Land for Sale in Abuja</span> <br />Build Your Dream Home
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto font-light">
             Secure your future with verified plots in Maitama, Guzape, Lugbe, and more.
@@ -109,7 +158,7 @@ export default async function Home() {
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Featured Properties</h2>
               <p className="text-gray-600 max-w-xl">
-                Hand-picked premium plots with verified C of O titles in Abuja's most sought-after locations.
+                Hand-picked premium plots with verified C of O titles in Abuja&apos;s most sought-after locations.
               </p>
             </div>
             <Button variant="outline" className="hidden md:flex" asChild>
@@ -117,11 +166,10 @@ export default async function Home() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredProperties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
-            ))}
-          </div>
+          <FeaturedListings
+            initialProperties={featuredProperties}
+            totalCount={count || featuredProperties.length}
+          />
 
           <div className="mt-8 text-center md:hidden">
             <Button variant="outline" className="w-full" asChild>
@@ -245,6 +293,71 @@ export default async function Home() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section with Schema */}
+      <section className="py-20 bg-white">
+        <script type="application/ld+json" suppressHydrationWarning>
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do I verify land title in Abuja?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Visit AGIS (Abuja Geographic Information Systems) with the land documents. They will confirm if the land has a valid C of O or R of O and if there are any encumbrances."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the difference between C of O and R of O?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "C of O (Certificate of Occupancy) is for individuals and grants 99-year lease. R of O (Right of Occupancy) is typically for government allocations and can be converted to C of O."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What are the best areas to buy land in Abuja?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Premium areas include Maitama, Asokoro, and Guzape. For investment, Katampe, Lugbe, and Idu offer high growth potential at lower entry prices."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much does land cost in Abuja?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Prices vary by location. Lugbe starts from ₦5M per plot, while Maitama can exceed ₦500M. Most middle-class areas like Gwarinpa range from ₦30M-₦80M."
+                }
+              }
+            ]
+          })}
+        </script>
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+          <div className="max-w-3xl mx-auto space-y-6">
+            <div className="bg-gray-50 p-6 rounded-xl border">
+              <h3 className="font-bold text-lg mb-2">How do I verify land title in Abuja?</h3>
+              <p className="text-gray-600">Visit AGIS (Abuja Geographic Information Systems) with the land documents. They will confirm if the land has a valid C of O or R of O and if there are any encumbrances. <Link href="/blog/how-to-verify-land-title-in-abuja" className="text-primary hover:underline">Read our complete guide →</Link></p>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-xl border">
+              <h3 className="font-bold text-lg mb-2">What is the difference between C of O and R of O?</h3>
+              <p className="text-gray-600">C of O (Certificate of Occupancy) is for individuals and grants 99-year lease. R of O (Right of Occupancy) is typically for government allocations and can be converted to C of O. <Link href="/blog/c-of-o-vs-r-of-o" className="text-primary hover:underline">Learn more →</Link></p>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-xl border">
+              <h3 className="font-bold text-lg mb-2">What are the best areas to buy land in Abuja?</h3>
+              <p className="text-gray-600">Premium areas include <Link href="/buy/maitama" className="text-primary hover:underline">Maitama</Link>, <Link href="/buy/asokoro" className="text-primary hover:underline">Asokoro</Link>, and <Link href="/buy/guzape" className="text-primary hover:underline">Guzape</Link>. For investment, <Link href="/buy/katampe" className="text-primary hover:underline">Katampe</Link>, <Link href="/buy/lugbe" className="text-primary hover:underline">Lugbe</Link>, and <Link href="/buy/idu" className="text-primary hover:underline">Idu</Link> offer high growth potential at lower entry prices.</p>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-xl border">
+              <h3 className="font-bold text-lg mb-2">How much does land cost in Abuja?</h3>
+              <p className="text-gray-600">Prices vary by location. Lugbe starts from ₦5M per plot, while Maitama can exceed ₦500M. Most middle-class areas like Gwarinpa range from ₦30M-₦80M. <Link href="/buy" className="text-primary hover:underline">Browse all listings →</Link></p>
             </div>
           </div>
         </div>

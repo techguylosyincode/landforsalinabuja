@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { MapPin, Ruler, CheckCircle, Phone, MessageSquare } from "lucide-react";
+import { MapPin, Ruler, CheckCircle, Phone, MessageSquare, BookOpen, Shield, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -29,7 +29,33 @@ type Property = {
   slug: string;
 };
 
+type RelatedProperty = {
+  id: string;
+  title: string;
+  price: number;
+  size_sqm: number;
+  images: string[];
+  slug: string;
+  district: string;
+};
+
 export const revalidate = 300;
+
+async function fetchRelatedProperties(district: string, excludeId: string): Promise<RelatedProperty[]> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from('properties')
+      .select('id, title, price, size_sqm, images, slug, district')
+      .eq('district', district)
+      .eq('status', 'active')
+      .neq('id', excludeId)
+      .limit(3);
+    return data || [];
+  } catch {
+    return [];
+  }
+}
 
 async function fetchProperty(slug: string): Promise<Property | null> {
   try {
@@ -120,6 +146,9 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
     const { slug, district } = await params;
     const property = await fetchProperty(decodeURIComponent(slug || ""));
     if (!property) notFound();
+
+    // Fetch related properties in the same district
+    const relatedProperties = await fetchRelatedProperties(district, property.id);
 
     const agent = property.profiles
       ? {
@@ -268,12 +297,33 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <Button className="w-full flex items-center justify-center gap-2">
-                    <Phone className="w-4 h-4" /> Call Agent
-                  </Button>
-                  <Button variant="outline" className="w-full flex items-center justify-center gap-2">
-                    <MessageSquare className="w-4 h-4" /> WhatsApp
-                  </Button>
+                  {agent?.phone && (
+                    <>
+                      <a href={`tel:${agent.phone}`} className="block">
+                        <Button className="w-full flex items-center justify-center gap-2">
+                          <Phone className="w-4 h-4" /> Call Agent
+                        </Button>
+                      </a>
+                      <a
+                        href={`https://wa.me/234${agent.phone.replace(/^0/, '')}?text=Hello, I am interested in: ${property.title}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+                          <MessageSquare className="w-4 h-4" /> WhatsApp
+                        </Button>
+                      </a>
+                      <p className="text-center text-sm text-gray-500 mt-2">
+                        📞 {agent.phone}
+                      </p>
+                    </>
+                  )}
+                  {!agent?.phone && (
+                    <p className="text-center text-sm text-gray-500">
+                      Contact info not available
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -288,6 +338,82 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
               </div>
             </div>
           </div>
+
+          {/* Helpful Resources - Internal Links to Blog Posts */}
+          <div className="mt-12 bg-white p-8 rounded-xl shadow-sm border">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <BookOpen className="w-6 h-6 text-primary" />
+              Helpful Resources
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link href="/blog/how-to-verify-land-title-in-abuja" className="group p-4 bg-gray-50 rounded-lg hover:bg-primary/5 transition-colors">
+                <div className="flex items-start gap-3">
+                  <FileText className="w-8 h-8 text-primary flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold group-hover:text-primary transition-colors">How to Verify Land Title</h3>
+                    <p className="text-sm text-gray-600 mt-1">Complete guide to verifying land documents at AGIS before purchase.</p>
+                  </div>
+                </div>
+              </Link>
+              <Link href="/blog/c-of-o-vs-r-of-o" className="group p-4 bg-gray-50 rounded-lg hover:bg-primary/5 transition-colors">
+                <div className="flex items-start gap-3">
+                  <FileText className="w-8 h-8 text-secondary flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold group-hover:text-primary transition-colors">C of O vs R of O Explained</h3>
+                    <p className="text-sm text-gray-600 mt-1">Understanding the difference between title types in Abuja.</p>
+                  </div>
+                </div>
+              </Link>
+              <Link href="/blog/land-scams-in-abuja-protection-guide" className="group p-4 bg-gray-50 rounded-lg hover:bg-primary/5 transition-colors">
+                <div className="flex items-start gap-3">
+                  <Shield className="w-8 h-8 text-red-500 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold group-hover:text-primary transition-colors">Avoid Land Scams</h3>
+                    <p className="text-sm text-gray-600 mt-1">Protect yourself from common real estate fraud in Abuja.</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Related Properties */}
+          {relatedProperties.length > 0 && (
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold mb-6">Similar Properties in {district.charAt(0).toUpperCase() + district.slice(1)}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedProperties.map((related) => (
+                  <Link
+                    key={related.id}
+                    href={`/buy/${related.district}/${related.slug}`}
+                    className="group bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <div className="relative h-48 bg-gray-200">
+                      <Image
+                        src={related.images?.[0] || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=400"}
+                        alt={related.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                        {related.title}
+                      </h3>
+                      <div className="flex justify-between items-center mt-2">
+                        <span className="text-primary font-bold">₦{related.price?.toLocaleString()}</span>
+                        <span className="text-sm text-gray-500">{related.size_sqm} sqm</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="text-center mt-6">
+                <Link href={`/buy/${district}`} className="text-primary hover:underline font-medium">
+                  View all properties in {district.charAt(0).toUpperCase() + district.slice(1)} →
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     );
