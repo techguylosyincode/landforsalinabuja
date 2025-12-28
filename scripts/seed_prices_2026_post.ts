@@ -28,7 +28,7 @@ async function seedPricesPost() {
         title: "Land Prices in Abuja 2026: Maitama, Kuje, & City Center Guide",
         slug: "land-prices-in-abuja-maitama-kuje-2026",
         category: "Market Analysis",
-        image_url: "/images/blog/abuja-city-gate.jpg", // Reusing the city gate image
+        image_url: "/images/blog/abuja-city-gate-2026.jpg", // Reusing the city gate image
         excerpt: "How much is land in Abuja? We break down 2026 prices for Maitama (Luxury), Kuje (Affordable), and the general city center. Don't overpay.",
         meta_title: "Land Prices in Abuja 2026 | Maitama, Kuje & City Center Rates",
         meta_description: "How much is a plot of land in Abuja? 2026 Price Guide: Maitama from ₦600M, Kuje from ₦3M. See current market rates for all districts.",

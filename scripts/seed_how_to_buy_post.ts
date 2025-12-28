@@ -28,7 +28,7 @@ async function seedHowToBuyPost() {
         title: "How to Buy Land in Abuja: The Ultimate 2026 Guide (Expert Advice)",
         slug: "how-to-buy-land-in-abuja",
         category: "Guide",
-        image_url: "/images/blog/how-to-buy-land-abuja-aerial-view.jpg",
+        image_url: "/images/blog/how-to-buy-land-abuja-aerial-2026.jpg",
         excerpt: "Looking to buy land in Abuja? This expert guide covers everything from C of O vs R of O, top locations for 2026, to avoiding scams. Read before you invest.",
         meta_title: "How to Buy Land in Abuja | 2026 Expert Guide & Prices",
         meta_description: "Learn how to buy land in Abuja safely. Expert guide on land titles (C of O), best locations (Lugbe, Idu, Guzape), prices, and avoiding scams in 2026.",
