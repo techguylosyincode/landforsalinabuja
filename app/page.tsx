@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle, ShieldCheck, Users, ArrowRight, TrendingUp, MapPin } from "lucide-react";
+import { CheckCircle, ShieldCheck, Users, ArrowRight, TrendingUp, MapPin, Wallet, Building2, ChevronRight } from "lucide-react";
 import FeaturedListings from "@/components/FeaturedListings";
 import HeroSearchForm from "@/components/HeroSearchForm";
 
@@ -48,7 +48,9 @@ export default async function Home() {
     .eq('status', 'active')
     .order('is_featured', { ascending: false })
     .order('created_at', { ascending: false })
-    .limit(30);
+    .limit(100);
+
+
 
   // Get total count for pagination
   const { count } = await supabase
@@ -56,7 +58,8 @@ export default async function Home() {
     .select('*', { count: 'exact', head: true })
     .eq('status', 'active');
 
-  const featuredProperties = (data || []).map((p: any) => ({
+  // Smart Mix Logic: Prioritize diversity of districts
+  const allProperties = (data || []).map((p: any) => ({
     id: p.id,
     title: p.title,
     price: p.price,
@@ -66,6 +69,33 @@ export default async function Home() {
     titleType: p.title_type,
     slug: p.slug || p.id
   }));
+
+  // Group by district
+  const districtGroups = new Map<string, Property[]>();
+  allProperties.forEach((p: Property) => {
+    const d = p.district || 'Other';
+    if (!districtGroups.has(d)) {
+      districtGroups.set(d, []);
+    }
+    districtGroups.get(d)?.push(p);
+  });
+
+  // Pick one from each district first
+  const smartMix: Property[] = [];
+  const districts = Array.from(districtGroups.keys());
+  const maxPerDistrict = Math.max(...Array.from(districtGroups.values()).map(g => g.length));
+
+  for (let i = 0; i < maxPerDistrict; i++) {
+    for (const district of districts) {
+      const group = districtGroups.get(district);
+      if (group && group[i]) {
+        smartMix.push(group[i]);
+      }
+    }
+  }
+
+  // Take the top 9 for initial display
+  const featuredProperties = smartMix.slice(0, 9);
   return (
     <main className="min-h-screen">
       {/* Homepage JSON-LD Schema */}
@@ -147,6 +177,67 @@ export default async function Home() {
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-secondary" /> Secure Process
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Filters / Browse by Category */}
+      <section className="py-12 bg-white border-b">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Link href="/buy?maxPrice=10000000" className="group relative">
+              <div className="bg-white p-6 rounded-2xl border border-green-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="bg-green-50 p-4 rounded-full text-green-600 group-hover:scale-110 transition-transform duration-300">
+                    <Wallet className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-lg group-hover:text-green-700 transition-colors">Budget Friendly</h3>
+                    <p className="text-sm text-gray-500 mb-2">Land under ₦10 Million</p>
+                    <span className="text-xs font-bold text-green-600 flex items-center gap-1 uppercase tracking-wide">
+                      View Listings <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-green-500 group-hover:translate-x-1 transition-all" />
+              </div>
+            </Link>
+
+            <Link href="/buy?payment_plan=true" className="group relative">
+              <div className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="bg-blue-50 p-4 rounded-full text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                    <CheckCircle className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-lg group-hover:text-blue-700 transition-colors">Payment Plans</h3>
+                    <p className="text-sm text-gray-500 mb-2">Pay in installments</p>
+                    <span className="text-xs font-bold text-blue-600 flex items-center gap-1 uppercase tracking-wide">
+                      View Listings <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+              </div>
+            </Link>
+
+            <Link href="/buy?type=commercial" className="group relative">
+              <div className="bg-white p-6 rounded-2xl border border-purple-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="bg-purple-50 p-4 rounded-full text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                    <Building2 className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-lg group-hover:text-purple-700 transition-colors">Commercial Land</h3>
+                    <p className="text-sm text-gray-500 mb-2">For business & plazas</p>
+                    <span className="text-xs font-bold text-purple-600 flex items-center gap-1 uppercase tracking-wide">
+                      View Listings <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
+              </div>
+            </Link>
           </div>
         </div>
       </section>

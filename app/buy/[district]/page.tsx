@@ -3,7 +3,7 @@ import PropertyCard from "@/components/PropertyCard";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { ArrowLeft, TrendingUp, ShieldCheck, MapPin, Info } from "lucide-react";
-import { districtContent } from "@/lib/district-content";
+
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -24,20 +24,18 @@ export const revalidate = 300;
 // Generate static params for top districts to speed up loading
 export async function generateStaticParams() {
     return [
-        { district: 'guzape' },
-        { district: 'lugbe' },
-        { district: 'idu' },
-        { district: 'maitama' },
-        { district: 'asokoro' },
-        { district: 'wuse-ii' },
-        { district: 'gwarinpa' },
-        { district: 'katampe' },
+        { district: 'scadens' },
     ];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ district: string }> }): Promise<Metadata> {
     const { district } = await params;
-    const content = districtContent[district.toLowerCase()];
+    const supabase = await createClient();
+
+    const { data: content } = await supabase
+        .select('*')
+        .eq('slug', district.toLowerCase())
+        .single();
 
     if (!content) {
         return {
@@ -47,12 +45,18 @@ export async function generateMetadata({ params }: { params: Promise<{ district:
     }
 
     return {
-        title: content.title,
+        title: `Land for Sale in ${content.name.charAt(0).toUpperCase() + content.name.slice(1)} | Area Guide`, // Fallback title if not in DB, or use DB title if we added it. 
+        // Wait, I didn't add a 'title' column in the migration, only 'name'. 
+        // The static file had a 'title' field. 
+        // The migration added: market_analysis, why_invest, infrastructure, faqs, slug.
+        // It already had: name, description, image_url.
+        // So I should construct the title dynamically or use the description.
+        // Let's use a constructed title for now.
         description: content.description,
         openGraph: {
-            title: content.title,
+            title: `Land for Sale in ${content.name}`,
             description: content.description,
-            images: [content.heroImage],
+            images: [content.image_url],
         }
     };
 }
@@ -60,9 +64,15 @@ export async function generateMetadata({ params }: { params: Promise<{ district:
 export default async function DistrictPage({ params }: { params: Promise<{ district: string }> }) {
     const { district } = await params;
     const districtName = district.toLowerCase();
-    const content = districtContent[districtName];
 
     const supabase = await createClient();
+
+    // Fetch district rich content
+    const { data: content } = await supabase
+        .from('districts')
+        .select('*')
+        .eq('slug', districtName)
+        .single();
     const { data } = await supabase
         .from('properties')
         .select('id, title, price, size_sqm, district, images, title_type, slug')
@@ -85,10 +95,10 @@ export default async function DistrictPage({ params }: { params: Promise<{ distr
     const displayDistrict = district.charAt(0).toUpperCase() + district.slice(1);
 
     // JSON-LD Schema for FAQs
-    const faqSchema = content ? {
+    const faqSchema = content && content.faqs ? {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": content.faqs.map(faq => ({
+        "mainEntity": content.faqs.map((faq: any) => ({
             "@type": "Question",
             "name": faq.question,
             "acceptedAnswer": {
@@ -119,30 +129,30 @@ export default async function DistrictPage({ params }: { params: Promise<{ distr
                         <ArrowLeft className="w-4 h-4 mr-2" /> Back to All Listings
                     </Link>
                     <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                        {content ? content.title.split('|')[0] : `Land for Sale in ${displayDistrict}`}
+                        {content ? `Land for Sale in ${displayDistrict}` : `Land for Sale in ${displayDistrict}`}
                     </h1>
                     <p className="text-xl text-gray-200 max-w-2xl">
                         {content ? content.description : `Browse verified listings in ${displayDistrict}, Abuja.`}
                     </p>
 
                     {/* Market Stats (Only if content exists) */}
-                    {content && (
+                    {content && content.market_analysis && (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
                             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10">
                                 <div className="text-sm text-gray-300">Avg. Price</div>
-                                <div className="text-xl font-bold">{content.marketAnalysis.averagePrice}</div>
+                                <div className="text-xl font-bold">{content.market_analysis.averagePrice}</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10">
                                 <div className="text-sm text-gray-300">Appreciation</div>
-                                <div className="text-xl font-bold text-green-400">{content.marketAnalysis.appreciationRate}</div>
+                                <div className="text-xl font-bold text-green-400">{content.market_analysis.appreciationRate}</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10">
                                 <div className="text-sm text-gray-300">Rental Yield</div>
-                                <div className="text-xl font-bold">{content.marketAnalysis.rentalYield}</div>
+                                <div className="text-xl font-bold">{content.market_analysis.rentalYield}</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10">
                                 <div className="text-sm text-gray-300">Demand</div>
-                                <div className="text-xl font-bold text-secondary">{content.marketAnalysis.demandLevel}</div>
+                                <div className="text-xl font-bold text-secondary">{content.market_analysis.demandLevel}</div>
                             </div>
                         </div>
                     )}
@@ -185,7 +195,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ distr
                                     Why Invest in {displayDistrict}?
                                 </h2>
                                 <ul className="space-y-4">
-                                    {content.whyInvest.map((reason, index) => (
+                                    {content.why_invest && content.why_invest.map((reason: string, index: number) => (
                                         <li key={index} className="flex items-start">
                                             <ShieldCheck className="w-5 h-5 text-secondary mt-1 mr-3 shrink-0" />
                                             <span dangerouslySetInnerHTML={{
@@ -202,7 +212,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ distr
                                     Frequently Asked Questions
                                 </h2>
                                 <div className="space-y-6">
-                                    {content.faqs.map((faq, index) => (
+                                    {content.faqs && content.faqs.map((faq: any, index: number) => (
                                         <div key={index} className="border-b last:border-0 pb-6 last:pb-0">
                                             <h3 className="font-bold text-gray-900 mb-2">{faq.question}</h3>
                                             <p className="text-gray-600">{faq.answer}</p>
@@ -220,7 +230,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ distr
                                     Infrastructure & Amenities
                                 </h3>
                                 <ul className="space-y-3">
-                                    {content.infrastructure.map((item, index) => (
+                                    {content.infrastructure && content.infrastructure.map((item: string, index: number) => (
                                         <li key={index} className="text-gray-600 text-sm flex items-center">
                                             <span className="w-1.5 h-1.5 bg-secondary rounded-full mr-2"></span>
                                             {item}

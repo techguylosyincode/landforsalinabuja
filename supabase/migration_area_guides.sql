@@ -1,21 +1,15 @@
--- Add new columns for Advanced Area Guides
-alter table districts 
-add column if not exists infrastructure_rating jsonb default '{}'::jsonb,
-add column if not exists title_type_common text,
-add column if not exists avg_price_history jsonb default '[]'::jsonb,
-add column if not exists pros text[] default '{}',
-add column if not exists cons text[] default '{}',
-add column if not exists landmarks text[] default '{}';
+-- Add rich content fields to districts table
+ALTER TABLE districts 
+ADD COLUMN IF NOT EXISTS market_analysis JSONB,
+ADD COLUMN IF NOT EXISTS why_invest TEXT[],
+ADD COLUMN IF NOT EXISTS infrastructure TEXT[],
+ADD COLUMN IF NOT EXISTS faqs JSONB;
 
--- Example of infrastructure_rating structure:
--- {
---   "roads": "Good",
---   "electricity": "Average",
---   "water": "Poor"
--- }
+-- Ensure slug exists (using name as slug for now if not present, but name is unique so we can use it)
+-- We might want a dedicated slug column if names have spaces, but current names are like 'guzape', 'wuse-ii'.
+-- Let's add a slug column just in case to be safe and consistent with other tables.
+ALTER TABLE districts 
+ADD COLUMN IF NOT EXISTS slug TEXT UNIQUE;
 
--- Example of avg_price_history structure:
--- [
---   {"year": 2023, "price": 50000000},
---   {"year": 2024, "price": 65000000}
--- ]
+-- Policy to allow anyone to read districts (already exists but good to confirm)
+-- create policy "Districts are viewable by everyone" on districts for select using (true);

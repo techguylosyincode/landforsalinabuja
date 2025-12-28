@@ -43,6 +43,12 @@ export default async function BuyPage({
         query = query.eq('title_type', titleType);
     }
 
+    // Apply property type filter (residential vs commercial)
+    const type = typeof params.type === 'string' ? params.type : '';
+    if (type) {
+        query = query.eq('type', type);
+    }
+
     // Apply price range
     const priceRange = typeof params.priceRange === 'string' ? params.priceRange : '';
     const minPriceParam = typeof params.minPrice === 'string' ? params.minPrice : '';
@@ -75,6 +81,12 @@ export default async function BuyPage({
         query = query.lte('size_sqm', parseInt(maxSize));
     }
 
+    // Apply payment plan filter
+    const paymentPlan = typeof params.payment_plan === 'string' ? params.payment_plan : '';
+    if (paymentPlan === 'true') {
+        query = query.contains('features', ['Payment Plan']);
+    }
+
     const { data, error } = await query;
 
     if (error) {
@@ -100,11 +112,13 @@ export default async function BuyPage({
             initialSearchTerm={searchTerm}
             initialDistrict={district}
             initialTitleType={titleType}
+            initialType={type}
             initialPriceRange={priceRange}
             initialMinPrice={minPriceParam}
             initialMaxPrice={maxPriceParam}
             initialMinSize={minSize}
             initialMaxSize={maxSize}
+            initialPaymentPlan={paymentPlan}
         />
     );
 }

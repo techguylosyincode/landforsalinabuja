@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { MapPin, Ruler, CheckCircle, Phone, MessageSquare, BookOpen, Shield, FileText } from "lucide-react";
+import { MapPin, Ruler, CheckCircle, Phone, MessageSquare, BookOpen, Shield, FileText, Bed, Bath, Car, CreditCard } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import PropertyGallery from "@/components/PropertyGallery";
 
 type ProfileData = {
   full_name: string | null;
@@ -27,6 +28,10 @@ type Property = {
   meta_description?: string | null;
   profiles?: ProfileData | null;
   slug: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  garages?: number;
+  payment_plans?: any;
 };
 
 type RelatedProperty = {
@@ -71,7 +76,7 @@ async function fetchProperty(slug: string): Promise<Property | null> {
     const { data, error } = await supabase
       .from("properties")
       .select(
-        "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, slug, profiles (full_name, phone_number, agency_name, is_verified)"
+        "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, slug, bedrooms, bathrooms, garages, payment_plans, profiles (full_name, phone_number, agency_name, is_verified)"
       )
       .or(primaryClauses.join(","))
       .limit(1)
@@ -95,7 +100,7 @@ async function fetchProperty(slug: string): Promise<Property | null> {
       const { data: alt, error: altError } = await supabase
         .from("properties")
         .select(
-          "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, slug, profiles (full_name, phone_number, agency_name, is_verified)"
+          "id, title, price, district, address, size_sqm, description, images, title_type, features, meta_title, meta_description, slug, bedrooms, bathrooms, garages, payment_plans, profiles (full_name, phone_number, agency_name, is_verified)"
         )
         .or(fallbackClauses.join(","))
         .order("created_at", { ascending: false })
@@ -227,9 +232,8 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Image */}
-              <div className="relative h-[400px] w-full rounded-xl overflow-hidden bg-gray-200">
-                <Image src={image} alt={property.title} fill className="object-cover" priority />
-              </div>
+              {/* Image Gallery */}
+              <PropertyGallery images={property.images || []} title={property.title} />
 
               {/* Details */}
               <div className="bg-white p-8 rounded-xl shadow-sm border">
@@ -254,6 +258,33 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
                       {property.size_sqm} sqm
                     </div>
                   </div>
+                  {property.bedrooms && (
+                    <div>
+                      <div className="text-sm text-gray-500">Bedrooms</div>
+                      <div className="font-bold flex items-center">
+                        <Bed className="w-4 h-4 mr-1 text-secondary" />
+                        {property.bedrooms} Beds
+                      </div>
+                    </div>
+                  )}
+                  {property.bathrooms && (
+                    <div>
+                      <div className="text-sm text-gray-500">Bathrooms</div>
+                      <div className="font-bold flex items-center">
+                        <Bath className="w-4 h-4 mr-1 text-secondary" />
+                        {property.bathrooms} Baths
+                      </div>
+                    </div>
+                  )}
+                  {property.garages && (
+                    <div>
+                      <div className="text-sm text-gray-500">Garage</div>
+                      <div className="font-bold flex items-center">
+                        <Car className="w-4 h-4 mr-1 text-secondary" />
+                        {property.garages} Cars
+                      </div>
+                    </div>
+                  )}
                   <div>
                     <div className="text-sm text-gray-500">Title</div>
                     <div className="font-bold flex items-center">
@@ -261,15 +292,47 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
                       {property.title_type}
                     </div>
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Use</div>
-                    <div className="font-bold">Residential</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Status</div>
-                    <div className="font-bold text-green-600 capitalize">{property.features?.[0] || "Active"}</div>
-                  </div>
                 </div>
+
+                {/* Features List */}
+                {property.features && property.features.length > 0 && (
+                  <div className="mb-8">
+                    <h3 className="text-xl font-bold mb-4">Property Features</h3>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {property.features.map((feature, index) => (
+                        <li key={index} className="flex items-center text-gray-600">
+                          <CheckCircle className="w-4 h-4 mr-2 text-green-500 flex-shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Payment Plans */}
+                {property.payment_plans && (
+                  <div className="mb-8 bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <h3 className="text-xl font-bold mb-4 flex items-center text-blue-900">
+                      <CreditCard className="w-5 h-5 mr-2" />
+                      Payment Plans
+                    </h3>
+                    <div className="space-y-4">
+                      {Object.entries(property.payment_plans).map(([planName, details]: [string, any], index) => (
+                        <div key={index} className="bg-white p-4 rounded-lg shadow-sm">
+                          <h4 className="font-bold text-lg mb-2 capitalize">{planName.replace(/_/g, ' ')}</h4>
+                          <div className="space-y-1 text-sm text-gray-700">
+                            {Object.entries(details).map(([key, value]: [string, any]) => (
+                              <div key={key} className="flex justify-between border-b border-gray-100 last:border-0 py-1">
+                                <span className="capitalize text-gray-500">{key.replace(/_/g, ' ')}:</span>
+                                <span className="font-medium">{typeof value === 'number' ? `₦${value.toLocaleString()}` : value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div>
                   <h3 className="text-xl font-bold mb-4">Description</h3>

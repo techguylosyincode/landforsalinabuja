@@ -27,6 +27,7 @@ create table properties (
   district text not null,
   address text,
   title_type text check (title_type in ('C_of_O', 'R_of_O', 'Allocation', 'Other')),
+  type text check (type in ('residential', 'commercial', 'mixed', 'industrial', 'land', 'other')) default 'residential',
   images text[],
   video_url text,
   status text check (status in ('active', 'sold', 'pending')) default 'active',

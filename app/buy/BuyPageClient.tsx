@@ -36,6 +36,17 @@ const TITLE_TYPES = [
     { value: "Other", label: "Other" },
 ];
 
+// Property types
+const PROPERTY_TYPES = [
+    { value: "", label: "All Property Types" },
+    { value: "residential", label: "Residential" },
+    { value: "commercial", label: "Commercial" },
+    { value: "industrial", label: "Industrial" },
+    { value: "mixed", label: "Mixed Use" },
+    { value: "land", label: "Land" },
+    { value: "other", label: "Other" },
+];
+
 // Price ranges
 const PRICE_RANGES = [
     { value: "", label: "Any Price" },
@@ -51,11 +62,14 @@ interface BuyPageClientProps {
     initialSearchTerm: string;
     initialDistrict: string;
     initialTitleType: string;
+    initialType: string;
     initialPriceRange: string;
     initialMinPrice: string;
     initialMaxPrice: string;
     initialMinSize: string;
+
     initialMaxSize: string;
+    initialPaymentPlan: string;
 }
 
 export default function BuyPageClient({
@@ -63,11 +77,14 @@ export default function BuyPageClient({
     initialSearchTerm,
     initialDistrict,
     initialTitleType,
+    initialType,
     initialPriceRange,
     initialMinPrice,
     initialMaxPrice,
     initialMinSize,
+
     initialMaxSize,
+    initialPaymentPlan,
 }: BuyPageClientProps) {
     const router = useRouter();
     const [showFilters, setShowFilters] = useState(false);
@@ -76,11 +93,14 @@ export default function BuyPageClient({
     const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
     const [selectedDistrict, setSelectedDistrict] = useState(initialDistrict);
     const [selectedTitleType, setSelectedTitleType] = useState(initialTitleType);
+    const [selectedType, setSelectedType] = useState(initialType);
     const [priceRange, setPriceRange] = useState(initialPriceRange);
     const [minPrice, setMinPrice] = useState(initialMinPrice);
     const [maxPrice, setMaxPrice] = useState(initialMaxPrice);
     const [minSize, setMinSize] = useState(initialMinSize);
+
     const [maxSize, setMaxSize] = useState(initialMaxSize);
+    const [paymentPlan, setPaymentPlan] = useState(initialPaymentPlan === 'true');
 
     // Apply filters by navigating to new URL
     const applyFilters = () => {
@@ -88,11 +108,14 @@ export default function BuyPageClient({
         if (searchTerm) params.set("q", searchTerm);
         if (selectedDistrict) params.set("district", selectedDistrict);
         if (selectedTitleType) params.set("titleType", selectedTitleType);
+        if (selectedType) params.set("type", selectedType);
         if (priceRange) params.set("priceRange", priceRange);
         if (minPrice) params.set("minPrice", minPrice);
         if (maxPrice) params.set("maxPrice", maxPrice);
         if (minSize) params.set("minSize", minSize);
+
         if (maxSize) params.set("maxSize", maxSize);
+        if (paymentPlan) params.set("payment_plan", "true");
 
         const queryString = params.toString();
         router.push(queryString ? `/buy?${queryString}` : "/buy");
@@ -103,11 +126,14 @@ export default function BuyPageClient({
         setSearchTerm("");
         setSelectedDistrict("");
         setSelectedTitleType("");
+        setSelectedType("");
         setPriceRange("");
         setMinPrice("");
         setMaxPrice("");
         setMinSize("");
+
         setMaxSize("");
+        setPaymentPlan(false);
         router.push("/buy");
     };
 
@@ -119,9 +145,10 @@ export default function BuyPageClient({
     };
 
     // Check if any filters are active
-    const hasActiveFilters = initialSearchTerm || initialDistrict || initialTitleType ||
+    const hasActiveFilters = initialSearchTerm || initialDistrict || initialTitleType || initialType ||
         initialPriceRange || initialMinPrice || initialMaxPrice ||
-        initialMinSize || initialMaxSize;
+
+        initialMinSize || initialMaxSize || initialPaymentPlan;
 
     return (
         <main className="min-h-screen bg-gray-50 py-8">
@@ -210,6 +237,22 @@ export default function BuyPageClient({
                                 </select>
                             </div>
 
+                            {/* Property Type */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+                                <select
+                                    value={selectedType}
+                                    onChange={(e) => setSelectedType(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                >
+                                    {PROPERTY_TYPES.map((type) => (
+                                        <option key={type.value} value={type.value}>
+                                            {type.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
                             {/* Price Range */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
@@ -253,6 +296,21 @@ export default function BuyPageClient({
                                 </div>
                             </div>
                         </div>
+
+                        {/* Payment Plan Toggle */}
+                        <div className="flex items-center space-x-2 pt-6">
+                            <input
+                                type="checkbox"
+                                id="paymentPlan"
+                                checked={paymentPlan}
+                                onChange={(e) => setPaymentPlan(e.target.checked)}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            />
+                            <label htmlFor="paymentPlan" className="text-sm font-medium text-gray-700">
+                                Show only with Payment Plans
+                            </label>
+                        </div>
+
 
                         {/* Custom Price + Apply Button */}
                         <div className="mt-4 pt-4 border-t flex flex-wrap items-end gap-4">
@@ -307,6 +365,11 @@ export default function BuyPageClient({
                                 {TITLE_TYPES.find(t => t.value === initialTitleType)?.label}
                             </span>
                         )}
+                        {initialType && (
+                            <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
+                                {PROPERTY_TYPES.find(t => t.value === initialType)?.label}
+                            </span>
+                        )}
                         {(initialPriceRange || initialMinPrice || initialMaxPrice) && (
                             <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
                                 Price: {initialPriceRange ? PRICE_RANGES.find(r => r.value === initialPriceRange)?.label : `₦${initialMinPrice || 0} - ₦${initialMaxPrice || "∞"}`}
@@ -315,6 +378,11 @@ export default function BuyPageClient({
                         {(initialMinSize || initialMaxSize) && (
                             <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
                                 Size: {initialMinSize || 0} - {initialMaxSize || "∞"} sqm
+                            </span>
+                        )}
+                        {initialPaymentPlan === 'true' && (
+                            <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
+                                Payment Plan
                             </span>
                         )}
                         <Button variant="ghost" size="sm" onClick={clearFilters} className="text-gray-500 h-7">
@@ -341,6 +409,7 @@ export default function BuyPageClient({
                     </div>
                 )}
             </div>
-        </main>
+        </main >
     );
 }
+
