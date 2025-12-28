@@ -270,6 +270,19 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Post a Request CTA */}
+      <section className="py-16 bg-primary text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4">Can&apos;t find what you&apos;re looking for?</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Post your specific requirements and let our network of verified agents find the perfect property for you.
+          </p>
+          <Button size="lg" variant="secondary" className="font-bold text-lg px-8" asChild>
+            <Link href="/requests/new">Post a Request</Link>
+          </Button>
+        </div>
+      </section>
+
       {/* Value Proposition / Why Invest */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
