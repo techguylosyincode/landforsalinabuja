@@ -137,9 +137,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const desc =
       property.meta_description ||
       `${property.title} - ${property.size_sqm}sqm in ${district}. ${property.description?.slice(0, 150)}`;
+    const image = property.images?.[0] || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop';
+
     return {
       title,
       description: desc,
+      alternates: {
+        canonical: `https://landforsaleinabuja.ng/buy/${district}/${slug}`
+      },
+      openGraph: {
+        title,
+        description: desc,
+        images: [image],
+        url: `https://landforsaleinabuja.ng/buy/${district}/${slug}`,
+        type: 'website'
+      },
+      twitter: {
+        card: 'summary_large_image',
+        site: '@landinabuja',
+        creator: '@landinabuja',
+        title,
+        description: desc,
+        images: [image],
+      }
     };
   } catch {
     return {};

@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { PlusCircle, BarChart3, List, Trash2, Edit, Zap } from "lucide-react";
+import { PlusCircle, BarChart3, List, Trash2, Edit, Zap, Receipt } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import ListingQuotaDisplay from "@/components/ListingQuotaDisplay";
+import UpgradeBanner from "@/components/UpgradeBanner";
 
 const BoostButton = dynamic(() => import("@/components/BoostButton"), { ssr: false });
 
@@ -143,12 +144,27 @@ export default function AgentDashboard() {
                         <h1 className="text-3xl font-bold">Agent Dashboard</h1>
                         <p className="text-gray-600">Welcome back! Manage your listings and view performance.</p>
                     </div>
-                    <Button className="flex items-center gap-2" asChild>
-                        <Link href="/agent/dashboard/new">
-                            <PlusCircle className="h-4 w-4" /> Add New Listing
-                        </Link>
-                    </Button>
+                    <div className="flex gap-2">
+                        <Button variant="outline" className="flex items-center gap-2" asChild>
+                            <Link href="/agent/dashboard/payments">
+                                <Receipt className="h-4 w-4" /> Payment History
+                            </Link>
+                        </Button>
+                        <Button className="flex items-center gap-2" asChild>
+                            <Link href="/agent/dashboard/new">
+                                <PlusCircle className="h-4 w-4" /> Add New Listing
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
+
+                {/* Upgrade Banner for Free Tier */}
+                {profile && (
+                    <UpgradeBanner
+                        currentTier={profile.subscription_tier || 'starter'}
+                        variant="banner"
+                    />
+                )}
 
                 {/* Stats Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -194,11 +210,29 @@ export default function AgentDashboard() {
                     </div>
 
                     {listings.length === 0 ? (
-                        <div className="p-6 text-center text-gray-500 py-12">
-                            <p>You have no active listings yet.</p>
-                            <Button variant="link" className="mt-2" asChild>
-                                <Link href="/agent/dashboard/new">Create your first listing</Link>
-                            </Button>
+                        <div className="p-8 text-center">
+                            <div className="max-w-md mx-auto">
+                                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <List className="h-8 w-8 text-gray-400" />
+                                </div>
+                                <h4 className="text-lg font-semibold text-gray-900 mb-2">No Listings Yet</h4>
+                                <p className="text-gray-500 mb-6">
+                                    Create your first property listing to start attracting buyers.
+                                </p>
+                                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                                    <Button asChild>
+                                        <Link href="/agent/dashboard/new">
+                                            <PlusCircle className="h-4 w-4 mr-2" />
+                                            Create First Listing
+                                        </Link>
+                                    </Button>
+                                    {profile?.subscription_tier !== 'pro' && profile?.subscription_tier !== 'agency' && (
+                                        <Button variant="outline" asChild>
+                                            <Link href="/pricing">View Pro Benefits →</Link>
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     ) : (
                         <div className="overflow-x-auto">

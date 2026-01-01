@@ -1,6 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, BarChart3, Shield, Users } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sell Your Land in Abuja | List Your Property Free",
+  description: "List your land for sale in Abuja. Reach thousands of verified buyers. Free basic listing, premium features available.",
+  alternates: {
+    canonical: 'https://landforsaleinabuja.ng/sell'
+  },
+  openGraph: {
+    title: "Sell Your Land in Abuja",
+    description: "List your land for sale and reach thousands of verified buyers.",
+    url: "https://landforsaleinabuja.ng/sell",
+    type: "website",
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@landinabuja',
+    title: "Sell Your Land in Abuja",
+    description: "List your land for sale and reach thousands of verified buyers.",
+    images: ['https://landforsaleinabuja.ng/logo.svg'],
+  }
+};
 
 export default function SellPage() {
     return (
@@ -73,16 +95,16 @@ export default function SellPage() {
                         <p className="text-gray-600">Choose the plan that fits your business needs.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                         {/* Free Plan */}
-                        <div className="border rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                        <div className="border rounded-2xl p-6 hover:shadow-lg transition-shadow">
                             <h3 className="text-2xl font-bold mb-2">Starter</h3>
-                            <div className="text-4xl font-bold mb-6">Free</div>
-                            <p className="text-gray-600 mb-6">Perfect for individual owners or new agents.</p>
-                            <ul className="space-y-4 mb-8">
+                            <div className="text-4xl font-bold mb-4">Free</div>
+                            <p className="text-gray-600 mb-6">Perfect for new agents.</p>
+                            <ul className="space-y-3 mb-8">
                                 <li className="flex items-center gap-2">
                                     <CheckCircle className="h-5 w-5 text-green-500" />
-                                    <span>1 Active Listing</span>
+                                    <span><strong>3</strong> Active Listings</span>
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <CheckCircle className="h-5 w-5 text-green-500" />
@@ -98,18 +120,18 @@ export default function SellPage() {
                             </Button>
                         </div>
 
-                        {/* Premium Plan */}
-                        <div className="border-2 border-primary rounded-2xl p-8 shadow-lg relative overflow-hidden">
+                        {/* Pro Plan */}
+                        <div className="border-2 border-primary rounded-2xl p-6 shadow-lg relative overflow-hidden">
                             <div className="absolute top-0 right-0 bg-secondary text-primary text-xs font-bold px-3 py-1 rounded-bl-lg">
-                                RECOMMENDED
+                                BEST VALUE
                             </div>
                             <h3 className="text-2xl font-bold mb-2">Pro Agent</h3>
-                            <div className="text-4xl font-bold mb-6">₦15,000<span className="text-lg font-normal text-gray-500">/mo</span></div>
-                            <p className="text-gray-600 mb-6">For serious agents who want to close more deals.</p>
-                            <ul className="space-y-4 mb-8">
+                            <div className="text-4xl font-bold mb-4">₦5,000<span className="text-lg font-normal text-gray-500">/mo</span></div>
+                            <p className="text-gray-600 mb-6">For serious agents.</p>
+                            <ul className="space-y-3 mb-8">
                                 <li className="flex items-center gap-2">
                                     <CheckCircle className="h-5 w-5 text-primary" />
-                                    <span>Unlimited Listings</span>
+                                    <span><strong>15</strong> Active Listings</span>
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <CheckCircle className="h-5 w-5 text-primary" />
@@ -117,15 +139,43 @@ export default function SellPage() {
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <CheckCircle className="h-5 w-5 text-primary" />
-                                    <span>Featured Listings Rotation</span>
+                                    <span>Featured Listings</span>
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <CheckCircle className="h-5 w-5 text-primary" />
-                                    <span>Advanced Analytics</span>
+                                    <span>Priority Support</span>
                                 </li>
                             </ul>
                             <Button className="w-full" asChild>
-                                <Link href="/agent/dashboard">Go Premium</Link>
+                                <Link href="/pricing">Upgrade to Pro</Link>
+                            </Button>
+                        </div>
+
+                        {/* Agency Plan */}
+                        <div className="border rounded-2xl p-6 hover:shadow-lg transition-shadow bg-gray-50">
+                            <h3 className="text-2xl font-bold mb-2">Agency</h3>
+                            <div className="text-4xl font-bold mb-4">₦15,000<span className="text-lg font-normal text-gray-500">/mo</span></div>
+                            <p className="text-gray-600 mb-6">For agencies & developers.</p>
+                            <ul className="space-y-3 mb-8">
+                                <li className="flex items-center gap-2">
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                    <span><strong>Unlimited</strong> Listings</span>
+                                </li>
+                                <li className="flex items-center gap-2">
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                    <span>"Verified Agency" Badge</span>
+                                </li>
+                                <li className="flex items-center gap-2">
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                    <span>Featured Listings</span>
+                                </li>
+                                <li className="flex items-center gap-2">
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                    <span>Dedicated Support</span>
+                                </li>
+                            </ul>
+                            <Button className="w-full" variant="outline" asChild>
+                                <Link href="/pricing">View Agency Plan</Link>
                             </Button>
                         </div>
                     </div>

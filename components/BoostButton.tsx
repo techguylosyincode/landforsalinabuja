@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Zap, X, Loader2 } from "lucide-react";
 
-const PAYSTACK_PUBLIC_KEY = "pk_test_c9c03d9bc9dd6f9b43f70bbc9c1783e5ad72b730";
+const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
 
 const BOOST_OPTIONS = [
     { duration: '7', days: 7, price: 3000, label: '7 Days' },
@@ -28,7 +28,7 @@ export default function BoostButton({ propertyId, propertyTitle, userEmail, onSu
     const router = useRouter();
 
     const config = {
-        reference: `boost_${propertyId}_${Date.now()}`,
+        reference: `land_boost_${propertyId}_${Date.now()}`,
         email: userEmail,
         amount: selectedOption.price * 100, // kobo
         publicKey: PAYSTACK_PUBLIC_KEY,

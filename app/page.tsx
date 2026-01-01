@@ -12,6 +12,9 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Land for Sale in Abuja | Buy Verified Land with C of O",
   description: "Find verified land for sale in Abuja. Browse listings in Maitama, Asokoro, Guzape, Wuse II, and more. Direct from owners and verified agents.",
+  alternates: {
+    canonical: 'https://landforsaleinabuja.ng'
+  },
   openGraph: {
     title: "Land for Sale in Abuja | Buy Verified Land",
     description: "Find verified land for sale in Abuja. Browse listings in Maitama, Asokoro, Guzape, Wuse II, and more.",
@@ -19,7 +22,21 @@ export const metadata: Metadata = {
     siteName: "LandForSaleInAbuja.ng",
     locale: "en_NG",
     type: "website",
+    images: [{
+      url: 'https://landforsaleinabuja.ng/logo.svg',
+      width: 1200,
+      height: 630,
+      alt: 'LandForSaleInAbuja.ng - Verified Land Marketplace'
+    }]
   },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@landinabuja',
+    creator: '@landinabuja',
+    title: "Land for Sale in Abuja | Verified Listings",
+    description: "Find verified land for sale in Abuja's top districts. C of O verified. Direct from owners and agents.",
+    images: ['https://landforsaleinabuja.ng/logo.svg'],
+  }
 };
 
 // Define Property type matching PropertyCard props
@@ -120,7 +137,7 @@ export default async function Home() {
               "@id": "https://landforsaleinabuja.ng/#organization",
               "name": "LandForSaleInAbuja.ng",
               "url": "https://landforsaleinabuja.ng",
-              "logo": "https://landforsaleinabuja.ng/logo.png",
+              "logo": "https://landforsaleinabuja.ng/logo.svg",
               "description": "The #1 marketplace for verified land sales in Abuja, Nigeria. Find plots with C of O in Maitama, Guzape, Asokoro, Lugbe, and more.",
               "areaServed": {
                 "@type": "City",

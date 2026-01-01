@@ -13,20 +13,21 @@ const PaystackButton = dynamic(() => import("@/components/PaystackButton"), {
     loading: () => <Button className="w-full" size="lg" disabled>Loading Payment...</Button>
 });
 
-// Replace with your actual Paystack Public Key
-const PAYSTACK_PUBLIC_KEY = "pk_test_c9c03d9bc9dd6f9b43f70bbc9c1783e5ad72b730";
+// Get Paystack Public Key from environment variable
+const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
 
-// Pricing configuration
+// Pricing configuration (Market Entry Strategy - Dec 2024)
+// Undercuts competitors: NPC Silver is ₦16k, PropertyPro entry is ₦15.9k
 const PRICING = {
     pro: {
-        monthly: 10000,
-        annual: 100000, // 2 months free (10k * 10)
-        listingLimit: 5,
+        monthly: 5000,           // ₦5,000/mo - aggressive entry price
+        annual: 50000,           // ₦50,000/yr - 2 months free (5k * 10)
+        listingLimit: 15,
     },
     agency: {
-        monthly: 25000,
-        annual: 250000, // 2 months free (25k * 10)
-        listingLimit: -1, // unlimited
+        monthly: 15000,          // ₦15,000/mo - cheaper than PropertyPro's ₦15.9k
+        annual: 150000,          // ₦150,000/yr - 2 months free (15k * 10)
+        listingLimit: -1,        // unlimited
     }
 };
 
@@ -143,21 +144,19 @@ export default function PricingPage() {
                     <div className="bg-white rounded-full p-1 shadow-sm border inline-flex">
                         <button
                             onClick={() => setBillingCycle('monthly')}
-                            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
-                                billingCycle === 'monthly'
-                                    ? 'bg-primary text-white'
-                                    : 'text-gray-600 hover:text-gray-900'
-                            }`}
+                            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${billingCycle === 'monthly'
+                                ? 'bg-primary text-white'
+                                : 'text-gray-600 hover:text-gray-900'
+                                }`}
                         >
                             Monthly
                         </button>
                         <button
                             onClick={() => setBillingCycle('annual')}
-                            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
-                                billingCycle === 'annual'
-                                    ? 'bg-primary text-white'
-                                    : 'text-gray-600 hover:text-gray-900'
-                            }`}
+                            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${billingCycle === 'annual'
+                                ? 'bg-primary text-white'
+                                : 'text-gray-600 hover:text-gray-900'
+                                }`}
                         >
                             Annual <span className="text-green-600 font-bold ml-1">Save 17%</span>
                         </button>
@@ -178,7 +177,7 @@ export default function PricingPage() {
                         <ul className="space-y-4 mb-8 flex-1">
                             <li className="flex items-center gap-3">
                                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                                <span><strong>1</strong> Active Listing</span>
+                                <span><strong>3</strong> Active Listings</span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
@@ -231,7 +230,7 @@ export default function PricingPage() {
                         <ul className="space-y-4 mb-8 flex-1">
                             <li className="flex items-center gap-3">
                                 <Check className="h-5 w-5 text-primary flex-shrink-0" />
-                                <span><strong>5</strong> Active Listings</span>
+                                <span><strong>15</strong> Active Listings</span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <Zap className="h-5 w-5 text-yellow-500 flex-shrink-0" />
@@ -264,6 +263,7 @@ export default function PricingPage() {
                                 onClose={handleClose}
                                 user={user}
                                 label={currentTier === 'agency' ? 'Downgrade to Pro' : 'Upgrade to Pro'}
+                                site="land"
                             />
                         )}
                     </div>
@@ -325,6 +325,7 @@ export default function PricingPage() {
                                 onClose={handleClose}
                                 user={user}
                                 label="Upgrade to Agency"
+                                site="land"
                             />
                         )}
                     </div>

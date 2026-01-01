@@ -12,13 +12,14 @@ interface PaystackButtonProps {
     onClose: () => void;
     user: any;
     label?: string;
+    site?: string; // Site identifier (land, house, 9ja) for multi-site webhook routing
 }
 
-const PaystackButton = ({ amount, email, publicKey, onSuccess, onClose, user, label = "Upgrade Now" }: PaystackButtonProps) => {
+const PaystackButton = ({ amount, email, publicKey, onSuccess, onClose, user, label = "Upgrade Now", site = "land" }: PaystackButtonProps) => {
     const router = useRouter();
 
     const config = {
-        reference: (new Date()).getTime().toString(),
+        reference: `${site}_subscription_${user?.id || "unknown"}_${(new Date()).getTime()}`,
         email: email,
         amount: amount * 100, // Amount in kobo
         publicKey: publicKey,

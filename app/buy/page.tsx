@@ -6,6 +6,16 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Search Land for Sale in Abuja | Filter by District & Price",
     description: "Search for land in Abuja by district, price, size, and title type. Find the perfect plot in Maitama, Asokoro, Guzape, and more.",
+    alternates: {
+        canonical: 'https://landforsaleinabuja.ng/buy'
+    },
+    twitter: {
+        card: 'summary_large_image',
+        site: '@landinabuja',
+        title: "Search Land for Sale in Abuja",
+        description: "Find your perfect plot by district, price, and size.",
+        images: ['https://landforsaleinabuja.ng/logo.svg'],
+    }
 };
 
 // Server Component - fetches data on the server

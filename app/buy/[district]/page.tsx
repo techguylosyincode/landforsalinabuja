@@ -40,20 +40,34 @@ export async function generateMetadata({ params }: { params: Promise<{ district:
     if (!content) {
         return {
             title: `Land for Sale in ${district.charAt(0).toUpperCase() + district.slice(1)} Abuja`,
-            description: `Find verified land for sale in ${district}, Abuja. Browse listings with C of O and R of O titles.`
+            description: `Find verified land for sale in ${district}, Abuja. Browse listings with C of O and R of O titles.`,
+            alternates: {
+                canonical: `https://landforsaleinabuja.ng/buy/${district.toLowerCase()}`
+            }
         };
     }
 
     return {
-        title: `Land for Sale in ${content.name.charAt(0).toUpperCase() + content.name.slice(1)} | Area Guide`, // Fallback title if not in DB, or use DB title if we added it. 
-        // Wait, I didn't add a 'title' column in the migration, only 'name'. 
-        // The static file had a 'title' field. 
+        title: `Land for Sale in ${content.name.charAt(0).toUpperCase() + content.name.slice(1)} | Area Guide`, // Fallback title if not in DB, or use DB title if we added it.
+        // Wait, I didn't add a 'title' column in the migration, only 'name'.
+        // The static file had a 'title' field.
         // The migration added: market_analysis, why_invest, infrastructure, faqs, slug.
         // It already had: name, description, image_url.
         // So I should construct the title dynamically or use the description.
         // Let's use a constructed title for now.
         description: content.description,
+        alternates: {
+            canonical: `https://landforsaleinabuja.ng/buy/${district.toLowerCase()}`
+        },
         openGraph: {
+            title: `Land for Sale in ${content.name}`,
+            description: content.description,
+            images: [content.image_url],
+            url: `https://landforsaleinabuja.ng/buy/${district.toLowerCase()}`
+        },
+        twitter: {
+            card: 'summary_large_image',
+            site: '@landinabuja',
             title: `Land for Sale in ${content.name}`,
             description: content.description,
             images: [content.image_url],

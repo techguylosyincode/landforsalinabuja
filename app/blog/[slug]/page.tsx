@@ -37,17 +37,31 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     if (!post) return {};
 
+    const image = post.image_url || 'https://landforsaleinabuja.ng/logo.svg';
+
     return {
         title: `${post.title} | LandForSaleInAbuja.ng`,
         description: post.excerpt || post.content.substring(0, 160),
+        alternates: {
+            canonical: `https://landforsaleinabuja.ng/blog/${slug}`
+        },
         openGraph: {
             title: post.title,
             description: post.excerpt || post.content.substring(0, 160),
             type: 'article',
             publishedTime: post.created_at,
             authors: [post.author_name || 'Admin'],
-            images: post.image_url ? [post.image_url] : [],
+            images: [image],
+            url: `https://landforsaleinabuja.ng/blog/${slug}`,
         },
+        twitter: {
+            card: 'summary_large_image',
+            site: '@landinabuja',
+            creator: '@landinabuja',
+            title: post.title,
+            description: post.excerpt || post.content.substring(0, 160),
+            images: [image],
+        }
     };
 }
 
@@ -76,7 +90,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             name: 'LandForSaleInAbuja.ng',
             logo: {
                 '@type': 'ImageObject',
-                url: 'https://landforsaleinabuja.ng/logo.png'
+                url: 'https://landforsaleinabuja.ng/logo.svg'
             }
         },
         mainEntityOfPage: {

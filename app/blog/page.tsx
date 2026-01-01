@@ -6,6 +6,16 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Abuja Land Authority | Guides & Market Insights",
     description: "Expert guides, market insights, and verification tips for land buyers and investors in Abuja. Learn about C of O, R of O, and avoiding scams.",
+    alternates: {
+        canonical: 'https://landforsaleinabuja.ng/blog'
+    },
+    twitter: {
+        card: 'summary',
+        site: '@landinabuja',
+        title: "Abuja Land Authority | Expert Guides",
+        description: "Market insights and verification tips for land buyers in Abuja.",
+        images: ['https://landforsaleinabuja.ng/logo.svg'],
+    }
 };
 
 export const revalidate = 3600;
