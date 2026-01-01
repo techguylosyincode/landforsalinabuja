@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ district:
     const supabase = await createClient();
 
     const { data: content } = await supabase
+        .from('districts')
         .select('*')
         .eq('slug', district.toLowerCase())
         .single();
