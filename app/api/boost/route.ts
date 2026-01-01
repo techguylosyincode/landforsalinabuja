@@ -36,10 +36,10 @@ export async function POST(request: Request) {
         if (!finalUserId) {
             const { data: property } = await supabase
                 .from('properties')
-                .select('profiles(id)')
+                .select('user_id')
                 .eq('id', propertyId)
                 .single();
-            finalUserId = property?.profiles?.id;
+            finalUserId = property?.user_id;
         }
 
         if (!finalUserId) {
