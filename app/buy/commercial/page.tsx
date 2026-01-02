@@ -81,11 +81,13 @@ export default async function CommercialBuyPage() {
                     initialSearchTerm=""
                     initialDistrict=""
                     initialTitleType=""
+                    initialType="commercial"
                     initialPriceRange=""
                     initialMinPrice=""
                     initialMaxPrice=""
                     initialMinSize=""
                     initialMaxSize=""
+                    initialPaymentPlan=""
                 />
             </div>
         </main>
