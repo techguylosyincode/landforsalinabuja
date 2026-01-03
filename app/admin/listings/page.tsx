@@ -19,7 +19,7 @@ export default async function ManageListings({
     // Fetch Pending Listings with Agent Info
     const { data: pendingListings, count: pendingCount } = await supabase
         .from('properties')
-        .select('id, title, district, price, status, is_featured, slug, created_at, user_id, user:profiles(display_name, company_name)', { count: 'exact' })
+        .select('*, user:profiles(display_name, company_name)', { count: 'exact' })
         .eq('status', 'pending')
         .order('created_at', { ascending: false })
         .range(offset, offset + itemsPerPage - 1);
@@ -27,7 +27,7 @@ export default async function ManageListings({
     // Fetch Active/Approved Listings with Agent Info
     const { data: approvedListings, count: approvedCount } = await supabase
         .from('properties')
-        .select('id, title, district, price, status, is_featured, slug, created_at, user_id, user:profiles(display_name, company_name)', { count: 'exact' })
+        .select('*, user:profiles(display_name, company_name)', { count: 'exact' })
         .neq('status', 'pending')
         .order('created_at', { ascending: false })
         .range(offset, offset + itemsPerPage - 1);
