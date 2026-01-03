@@ -15,10 +15,7 @@ interface Listing {
     slug: string;
     created_at: string;
     user_id: string;
-    user?: {
-        display_name?: string;
-        company_name?: string;
-    };
+    user?: any; // Can be array or object from Supabase relationship
 }
 
 interface AdminListingsClientProps {
@@ -78,7 +75,12 @@ export default function AdminListingsClient({
 
     const getAgentName = (listing: Listing) => {
         if (!listing.user) return 'Unknown Agent';
-        return listing.user.company_name || listing.user.display_name || 'Unknown Agent';
+
+        // Handle both array and object returns from Supabase
+        const userProfile = Array.isArray(listing.user) ? listing.user[0] : listing.user;
+
+        if (!userProfile) return 'Unknown Agent';
+        return userProfile.company_name || userProfile.display_name || 'Unknown Agent';
     };
 
     const ListingTable = ({ listings, title, emptyMsg }: { listings: Listing[]; title: string; emptyMsg: string }) => (

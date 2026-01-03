@@ -64,8 +64,8 @@ export default async function ManageListings({
 
     return (
         <AdminListingsClient
-            pendingListings={pendingListings || []}
-            approvedListings={approvedListings || []}
+            pendingListings={(pendingListings as any) || []}
+            approvedListings={(approvedListings as any) || []}
             pendingCount={pendingCount || 0}
             approvedCount={approvedCount || 0}
             currentPage={page}
