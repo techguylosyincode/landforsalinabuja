@@ -8,92 +8,165 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { User, Building2, Briefcase } from "lucide-react";
 
+// Fetch with timeout helper to prevent hanging requests
+async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    throw error;
+  }
+}
+
 export default function RegisterPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [accountType, setAccountType] = useState<'individual' | 'agent' | 'agency'>('individual');
-    const sourcePath = "/register";
-
-    const logEvent = async (event_type: string, payload: Record<string, any> = {}) => {
-        try {
-            await fetch("/api/signup/event", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ event_type, source_path: sourcePath, ...payload }),
-            });
-        } catch (err) {
-            console.warn("Signup event log failed:", err);
-        }
-    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
-        const formData = new FormData(e.currentTarget);
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const fullName = formData.get("full_name") as string;
-        const phone = formData.get("phone") as string;
-        const agency = formData.get("agency") as string;
+        console.log("=== REGISTRATION STARTED ===");
 
-        const supabase = createClient();
+        try {
+            console.log("Registration: Inside try block");
 
-        logEvent("register_submit_attempt", { email, role_selected: accountType });
+            const formData = new FormData(e.currentTarget);
+            console.log("Registration: FormData created");
 
-        const normalizedRole = accountType === 'individual' ? 'user' : accountType;
+            const email = formData.get("email") as string;
+            const password = formData.get("password") as string;
+            const fullName = formData.get("full_name") as string;
+            const phone = formData.get("phone") as string;
+            const agency = formData.get("agency") as string;
 
-        // 1. Sign up the user (also store metadata for fallback profile creation)
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    full_name: fullName,
-                    phone_number: phone,
-                    agency_name: accountType === 'agency' ? agency : accountType === 'agent' ? 'Independent Agent' : null,
-                    role: normalizedRole,
-                },
-            },
-        });
+            console.log("Registration: Form data extracted - email:", email, "fullName:", fullName);
 
-        if (authError) {
-            setError(authError.message);
-            setLoading(false);
-            return;
-        }
+            const supabase = createClient();
 
-        if (authData.user) {
-            logEvent("register_success", {
+            const normalizedRole = accountType === 'individual' ? 'user' : accountType;
+            const resolvedAgencyName =
+                accountType === 'agency'
+                    ? agency
+                    : accountType === 'agent'
+                        ? 'Independent Agent'
+                        : null;
+
+            // 1. Sign up the user (also store metadata for fallback profile creation)
+            const { data: authData, error: authError } = await supabase.auth.signUp({
                 email,
-                role_selected: accountType,
-                user_id: authData.user.id,
-            });
-            // 2. Create the profile with selected role
-            // 2. Create the profile using server-side route (bypasses RLS issues when no session)
-            const profileResp = await fetch("/api/profile/create", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id: authData.user.id,
-                    full_name: fullName,
-                    phone_number: phone,
-                    agency_name: accountType === 'agency' ? agency : accountType === 'agent' ? 'Independent Agent' : null,
-                    role: normalizedRole,
-                }),
+                password,
+                options: {
+                    data: {
+                        full_name: fullName,
+                        phone_number: phone,
+                        agency_name: resolvedAgencyName,
+                        role: normalizedRole,
+                    },
+                },
             });
 
-            if (!profileResp.ok) {
-                console.error("Profile creation error:", await profileResp.text());
+            console.log("Registration: Supabase signup result - success:", !!authData.user, "error:", authError?.message);
+            console.log("Registration: Supabase session returned:", !!authData.session);
+
+            if (authError) {
+                setError(authError.message);
+                setLoading(false);
+                return;
             }
 
-            // 3. Show Success Message (No Redirect)
-            alert("Registration successful! Please check your email to verify your account.");
-            router.push("/login");
+            if (authData.user) {
+                if (!authData.session) {
+                    console.warn(
+                        "Registration: No session returned. If Supabase email confirmation is enabled, disable it for custom verification."
+                    );
+                    console.log("Registration: No session returned; attempting sign-in for session persistence");
+                    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                        email,
+                        password,
+                    });
+                    console.log(
+                        "Registration: Sign-in after signup success:",
+                        !!signInData.session,
+                        "error:",
+                        signInError?.message
+                    );
+                }
+
+                // 2. Create the profile with selected role
+                try {
+                    const profileResp = await fetchWithTimeout("/api/profile/create", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            id: authData.user.id,
+                            full_name: fullName,
+                            phone_number: phone,
+                            agency_name: resolvedAgencyName,
+                            role: normalizedRole,
+                        }),
+                    }, 10000);
+
+                    console.log("Registration: Profile creation status:", profileResp.status);
+
+                    if (!profileResp.ok) {
+                        const errorText = await profileResp.text();
+                        console.error("Profile creation error:", errorText);
+                    }
+                } catch (profileErr) {
+                    console.error("Profile creation fetch error:", profileErr);
+                }
+
+                // 3. Generate verification token and send email
+                const token = crypto.randomUUID();
+                try {
+                    const emailResp = await fetchWithTimeout("/api/auth/send-verification-email", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            email,
+                            fullName,
+                            token,
+                            userId: authData.user.id,
+                        }),
+                    }, 15000);
+
+                    console.log("Registration: Email send status:", emailResp.status);
+
+                    if (!emailResp.ok) {
+                        const errorText = await emailResp.text();
+                        console.error("Email send error:", errorText);
+                    }
+                } catch (emailErr) {
+                    console.error("Email send fetch error:", emailErr);
+                    // Continue anyway - user can request new verification email later
+                }
+
+                // 4. Success - redirect to check-email page
+                console.log("Registration: Success! Redirecting to check-email page");
+                router.push("/auth/check-email");
+            }
+        } catch (err) {
+            console.error("=== REGISTRATION ERROR ===", err);
+            console.error("Error type:", typeof err);
+            console.error("Error message:", err instanceof Error ? err.message : String(err));
+            console.error("Error stack:", err instanceof Error ? err.stack : "No stack");
+            setError(err instanceof Error ? err.message : "An unexpected error occurred");
+        } finally {
+            console.log("=== REGISTRATION FINALLY BLOCK ===");
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     return (
@@ -165,7 +238,6 @@ export default function RegisterPage() {
                                 required
                                 placeholder="John Doe"
                                 className="mt-1"
-                                onFocus={() => logEvent("register_start", { role_selected: accountType })}
                             />
                         </div>
 

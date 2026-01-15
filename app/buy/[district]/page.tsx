@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import PropertyCard from "@/components/PropertyCard";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { ArrowLeft, TrendingUp, ShieldCheck, MapPin, Info } from "lucide-react";
+import { ArrowLeft, TrendingUp, ShieldCheck, MapPin, Info, BookOpen } from "lucide-react";
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -94,6 +94,14 @@ export default async function DistrictPage({ params }: { params: Promise<{ distr
         .ilike('district', district) // Use original param for DB query to match case-insensitive
         .order('created_at', { ascending: false })
         .limit(24);
+
+    // Fetch related blog posts for internal linking
+    const { data: blogPosts } = await supabase
+        .from('blog_posts')
+        .select('id, title, slug, excerpt, image_url, category')
+        .or('status.eq.published,published.is.true')
+        .order('created_at', { ascending: false })
+        .limit(4);
 
     const properties: Property[] = (data || []).map((p: any) => ({
         id: p.id,
@@ -263,6 +271,51 @@ export default async function DistrictPage({ params }: { params: Promise<{ distr
                                     <Link href="/contact">Contact an Agent</Link>
                                 </Button>
                             </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Related Blog Posts - Internal Linking for SEO */}
+                {blogPosts && blogPosts.length > 0 && (
+                    <div className="mt-12 bg-white rounded-xl shadow-sm p-6 md:p-8">
+                        <h2 className="text-2xl font-bold mb-6 flex items-center">
+                            <BookOpen className="w-6 h-6 text-primary mr-2" />
+                            Helpful Guides for {displayDistrict} Buyers
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {blogPosts.map((post: any) => (
+                                <Link
+                                    key={post.id}
+                                    href={`/blog/${post.slug}`}
+                                    className="group block"
+                                >
+                                    {post.image_url && (
+                                        <div className="relative h-32 rounded-lg overflow-hidden mb-3">
+                                            <img
+                                                src={post.image_url}
+                                                alt={post.title}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                        </div>
+                                    )}
+                                    <span className="text-xs font-semibold text-primary uppercase tracking-wide">
+                                        {post.category || 'Guide'}
+                                    </span>
+                                    <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors mt-1 line-clamp-2">
+                                        {post.title}
+                                    </h3>
+                                    {post.excerpt && (
+                                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                            {post.excerpt}
+                                        </p>
+                                    )}
+                                </Link>
+                            ))}
+                        </div>
+                        <div className="text-center mt-6">
+                            <Link href="/blog" className="text-primary hover:underline font-medium">
+                                View all buying guides →
+                            </Link>
                         </div>
                     </div>
                 )}

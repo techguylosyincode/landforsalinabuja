@@ -22,11 +22,14 @@ export default function LoginPage() {
         const password = formData.get("password") as string;
 
         try {
+            console.log("Login: Starting sign in for", email);
             const supabase = createClient();
-            const { error } = await supabase.auth.signInWithPassword({
+            const { data: signInData, error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
             });
+
+            console.log("Login: Sign in result - session:", !!signInData?.session, "error:", error?.message);
 
             if (error) {
                 console.error("Login error:", error);
@@ -36,6 +39,31 @@ export default function LoginPage() {
                     setError(error.message);
                 }
                 return;
+            }
+
+            // Check email verification status and payment before redirecting
+            console.log("Login: Fetching user details");
+            const { data: { user } } = await supabase.auth.getUser();
+            console.log("Login: User fetched:", user?.id);
+            if (user) {
+                const { data: profileData, error: profileError } = await supabase
+                    .from("profiles")
+                    .select("email_verified, subscription_tier, payment_required")
+                    .eq("id", user.id)
+                    .single();
+
+                console.log("Login: Profile data:", profileData, "Error:", profileError?.message);
+
+                if (profileData) {
+                    // Freemium model: only check email verification
+                    if (!profileData.email_verified) {
+                        console.log("Login: Email not verified, blocking access");
+                        setError("Please verify your email before accessing your dashboard. Check your inbox for the verification link.");
+                        return;
+                    }
+
+                    console.log("Login: Email verified, redirecting to dashboard");
+                }
             }
 
             // Hard redirect to ensure session cookies are picked by server components immediately

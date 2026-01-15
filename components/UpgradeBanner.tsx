@@ -43,7 +43,7 @@ export default function UpgradeBanner({
                         Get more listings, verified badge, and featured placement.
                     </p>
                     <Button size="sm" asChild>
-                        <Link href="/pricing">View Plans</Link>
+                        <Link href="/onboarding/payment">Upgrade Now</Link>
                     </Button>
                 </div>
             </div>
@@ -61,7 +61,7 @@ export default function UpgradeBanner({
                     </span>
                 </div>
                 <Button size="sm" variant="ghost" className="text-primary hover:text-primary" asChild>
-                    <Link href="/pricing">Upgrade →</Link>
+                    <Link href="/onboarding/payment">Upgrade →</Link>
                 </Button>
             </div>
         );
@@ -118,7 +118,7 @@ export default function UpgradeBanner({
                         className="bg-white text-primary hover:bg-white/90 font-bold shadow-lg"
                         asChild
                     >
-                        <Link href="/pricing">
+                        <Link href="/onboarding/payment">
                             Upgrade Now — ₦5,000/mo
                         </Link>
                     </Button>

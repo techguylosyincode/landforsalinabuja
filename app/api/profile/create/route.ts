@@ -15,23 +15,37 @@ export async function POST(req: Request) {
         }
 
         const supabase = createAdminClient();
+        const profilePayload = {
+            id,
+            full_name: full_name ?? "",
+            phone_number: phone_number ?? "",
+            agency_name: agency_name ?? null,
+            role: role ?? "user",
+            email_verified: false,
+            payment_required: false,  // Freemium: no payment required for 1 free listing
+            subscription_tier: 'starter',  // Start with free tier (1 listing)
+            subscription_expiry: null,  // Starter tier never expires
+        };
+
         const { error } = await supabase
             .from("profiles")
-            .upsert({
-                id,
-                full_name: full_name ?? "",
-                phone_number: phone_number ?? "",
-                agency_name: agency_name ?? null,
-                role: role ?? "user",
-                subscription_tier: "starter",
-                is_verified: false,
-                verification_status: "unverified",
-                created_at: new Date().toISOString(),
-            });
+            .upsert(profilePayload, { onConflict: "id" });
 
         if (error) {
-            console.error("Admin profile upsert error:", error);
-            return NextResponse.json({ error: "Failed to create profile" }, { status: 500 });
+            console.error("Admin profile upsert error:", {
+                message: error.message,
+                details: error.details,
+                hint: error.hint,
+                code: error.code,
+            });
+            return NextResponse.json(
+                {
+                    error: "Failed to create profile",
+                    details: error.message,
+                    code: error.code,
+                },
+                { status: 500 }
+            );
         }
 
         return NextResponse.json({ ok: true });

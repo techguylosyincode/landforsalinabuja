@@ -17,6 +17,15 @@ type BlogPost = {
     excerpt?: string;
 };
 
+type RelatedPost = {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt?: string;
+    image_url?: string;
+    category: string;
+};
+
 export const revalidate = 3600; // Revalidate every hour
 
 async function fetchPost(slug: string): Promise<BlogPost | null> {
@@ -29,6 +38,46 @@ async function fetchPost(slug: string): Promise<BlogPost | null> {
 
     if (error || !data) return null;
     return data as BlogPost;
+}
+
+async function fetchRelatedPosts(category: string, currentSlug: string): Promise<RelatedPost[]> {
+    const supabase = await createClient();
+
+    // First try to get posts from same category
+    const { data: sameCategoryPosts } = await supabase
+        .from('blog_posts')
+        .select('id, title, slug, excerpt, image_url, category')
+        .eq('category', category)
+        .neq('slug', currentSlug)
+        .or('status.eq.published,published.is.true')
+        .limit(3);
+
+    if (sameCategoryPosts && sameCategoryPosts.length >= 3) {
+        return sameCategoryPosts;
+    }
+
+    // If not enough, get latest posts from any category
+    const { data: latestPosts } = await supabase
+        .from('blog_posts')
+        .select('id, title, slug, excerpt, image_url, category')
+        .neq('slug', currentSlug)
+        .or('status.eq.published,published.is.true')
+        .order('created_at', { ascending: false })
+        .limit(4);
+
+    // Combine and dedupe
+    const combined = [...(sameCategoryPosts || []), ...(latestPosts || [])];
+    const seen = new Set<string>();
+    const unique: RelatedPost[] = [];
+    for (const post of combined) {
+        if (!seen.has(post.slug)) {
+            seen.add(post.slug);
+            unique.push(post);
+        }
+        if (unique.length >= 4) break;
+    }
+
+    return unique;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -72,6 +121,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     if (!post) {
         notFound();
     }
+
+    // Fetch related posts
+    const relatedPosts = await fetchRelatedPosts(post.category || 'Guide', slug);
 
     const jsonLd = {
         '@context': 'https://schema.org',
@@ -184,6 +236,50 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                 </Button>
                             </div>
                         </div>
+
+                        {/* Related Posts */}
+                        {relatedPosts.length > 0 && (
+                            <div className="mt-12 md:mt-16 pt-8 border-t">
+                                <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {relatedPosts.map((related) => (
+                                        <Link
+                                            key={related.id}
+                                            href={`/blog/${related.slug}`}
+                                            className="group flex gap-4 p-4 bg-gray-50 rounded-xl hover:bg-primary/5 transition-colors"
+                                        >
+                                            {related.image_url && (
+                                                <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+                                                    <img
+                                                        src={related.image_url}
+                                                        alt={related.title}
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <span className="text-xs font-semibold text-primary uppercase tracking-wide">
+                                                    {related.category || 'Guide'}
+                                                </span>
+                                                <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors mt-1 line-clamp-2">
+                                                    {related.title}
+                                                </h3>
+                                                {related.excerpt && (
+                                                    <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                                        {related.excerpt}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                                <div className="text-center mt-6">
+                                    <Link href="/blog" className="text-primary hover:underline font-medium">
+                                        View all articles →
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
                     </article>
 
                     {/* Sidebar */}

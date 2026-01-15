@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PropertyCard from "@/components/PropertyCard";
-import { Search, Filter, X } from "lucide-react";
+import Breadcrumb from "@/components/Breadcrumb";
+import Link from "next/link";
+import { Search, Filter, X, BookOpen } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -57,6 +59,16 @@ const PRICE_RANGES = [
     { value: "100000000-999999999999", label: "Above ₦100M" },
 ];
 
+// Blog post type
+type BlogPost = {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt?: string;
+    image_url?: string;
+    category?: string;
+};
+
 interface BuyPageClientProps {
     initialProperties: Property[];
     initialSearchTerm: string;
@@ -67,9 +79,9 @@ interface BuyPageClientProps {
     initialMinPrice: string;
     initialMaxPrice: string;
     initialMinSize: string;
-
     initialMaxSize: string;
     initialPaymentPlan: string;
+    blogPosts: BlogPost[];
 }
 
 export default function BuyPageClient({
@@ -82,9 +94,9 @@ export default function BuyPageClient({
     initialMinPrice,
     initialMaxPrice,
     initialMinSize,
-
     initialMaxSize,
     initialPaymentPlan,
+    blogPosts,
 }: BuyPageClientProps) {
     const router = useRouter();
     const [showFilters, setShowFilters] = useState(false);
@@ -153,6 +165,12 @@ export default function BuyPageClient({
     return (
         <main className="min-h-screen bg-gray-50 py-8">
             <div className="container mx-auto px-4">
+                {/* Breadcrumb */}
+                <Breadcrumb
+                    items={[{ label: 'Buy Land', href: undefined }]}
+                    className="mb-4"
+                />
+
                 {/* Header & Search */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div>
@@ -408,8 +426,53 @@ export default function BuyPageClient({
                         <Button onClick={clearFilters}>Clear All Filters</Button>
                     </div>
                 )}
+
+                {/* Related Blog Posts - Internal Linking for SEO */}
+                {blogPosts && blogPosts.length > 0 && (
+                    <div className="mt-12 bg-white rounded-xl shadow-sm p-6 md:p-8">
+                        <h2 className="text-2xl font-bold mb-6 flex items-center">
+                            <BookOpen className="w-6 h-6 text-primary mr-2" />
+                            Helpful Guides for Land Buyers
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {blogPosts.map((post) => (
+                                <Link
+                                    key={post.id}
+                                    href={`/blog/${post.slug}`}
+                                    className="group block"
+                                >
+                                    {post.image_url && (
+                                        <div className="relative h-32 rounded-lg overflow-hidden mb-3">
+                                            <img
+                                                src={post.image_url}
+                                                alt={post.title}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                        </div>
+                                    )}
+                                    <span className="text-xs font-semibold text-primary uppercase tracking-wide">
+                                        {post.category || 'Guide'}
+                                    </span>
+                                    <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors mt-1 line-clamp-2">
+                                        {post.title}
+                                    </h3>
+                                    {post.excerpt && (
+                                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                            {post.excerpt}
+                                        </p>
+                                    )}
+                                </Link>
+                            ))}
+                        </div>
+                        <div className="text-center mt-6">
+                            <Link href="/blog" className="text-primary hover:underline font-medium">
+                                View all buying guides →
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </div>
-        </main >
+        </main>
     );
 }
 

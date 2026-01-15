@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowLeft, Upload, AlertCircle, X, Loader2, Sparkles, Search } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle, X, Loader2, Sparkles, Search, Zap, Crown } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -24,6 +24,8 @@ export default function AddListingPage() {
     const [activeListingsCount, setActiveListingsCount] = useState(0);
     const [canFeature, setCanFeature] = useState(false);
     const [wantsFeatured, setWantsFeatured] = useState(false);
+    const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+    const [effectiveTier, setEffectiveTier] = useState<string>('starter');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Dropdown Data
@@ -36,8 +38,31 @@ export default function AddListingPage() {
             const supabase = createClient();
             setOptionsLoading(true);
 
+            // Fetch Dropdowns first (doesn't require auth)
             try {
-                // Fetch User & Premium Status
+                const [locsRes, typesRes, estsRes] = await Promise.all([
+                    supabase.from('locations').select('id, name').order('name'),
+                    supabase.from('land_types').select('id, name').order('name'),
+                    supabase.from('estates').select('id, name').order('name')
+                ]);
+
+                console.log("Dropdown fetch results:", { locs: locsRes, types: typesRes, ests: estsRes });
+
+                if (locsRes.data) setLocations(locsRes.data);
+                if (typesRes.data) setLandTypes(typesRes.data);
+                if (estsRes.data) setEstates(estsRes.data);
+
+                if (locsRes.error) console.error("Locations fetch error:", locsRes.error);
+                if (typesRes.error) console.error("Land types fetch error:", typesRes.error);
+                if (estsRes.error) console.error("Estates fetch error:", estsRes.error);
+            } catch (err) {
+                console.error("Error loading dropdown data", err);
+            } finally {
+                setOptionsLoading(false);
+            }
+
+            // Fetch User & Premium Status (separate try block)
+            try {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (user) {
                     const { data } = await supabase.from('profiles').select('subscription_tier, subscription_expiry, verification_status, is_verified, role').eq('id', user.id).single();
@@ -48,16 +73,17 @@ export default function AddListingPage() {
 
                     // Treat expired as starter in the UI
                     const expiry = data?.subscription_expiry ? new Date(data.subscription_expiry) : null;
-                    const effectiveTier = expiry && expiry.getTime() < Date.now() ? 'starter' : data?.subscription_tier;
+                    const tier = expiry && expiry.getTime() < Date.now() ? 'starter' : (data?.subscription_tier || 'starter');
+                    setEffectiveTier(tier);
 
-                    if (effectiveTier === 'premium' || effectiveTier === 'pro' || effectiveTier === 'agency') {
+                    if (tier === 'premium' || tier === 'pro' || tier === 'agency') {
                         setIsPremium(true);
                     } else {
                         setIsPremium(false);
                     }
 
                     // Check if user can feature listings
-                    const featuredLimit = getFeaturedLimit(effectiveTier || 'starter');
+                    const featuredLimit = getFeaturedLimit(tier || 'starter');
                     setCanFeature(featuredLimit > 0);
 
                     if (data?.verification_status === "verified" || data?.is_verified) {
@@ -67,29 +93,26 @@ export default function AddListingPage() {
                     }
 
                     // Fetch active listings count
-                    const { data: propertiesData } = await supabase
+                    const { count: activeCount } = await supabase
                         .from('properties')
-                        .select('id', { count: 'exact', head: true })
+                        .select('*', { count: 'exact', head: true })
                         .eq('agent_id', user.id)
                         .eq('status', 'active');
 
-                    if (propertiesData) {
-                        setActiveListingsCount(propertiesData.length || 0);
+                    const listingsCount = activeCount || 0;
+                    setActiveListingsCount(listingsCount);
+
+                    // Check if user has reached their listing limit
+                    const limit = LISTING_LIMITS[tier as keyof typeof LISTING_LIMITS] ?? 1;
+                    if (limit > 0 && listingsCount >= limit) {
+                        // Show upgrade prompt for starter/free users who've used their 1 free listing
+                        if (tier === 'starter' || tier === 'free') {
+                            setShowUpgradePrompt(true);
+                        }
                     }
                 }
-
-                // Fetch Dropdowns
-                const { data: locs } = await supabase.from('locations').select('id, name').order('name');
-                const { data: types } = await supabase.from('land_types').select('id, name').order('name');
-                const { data: ests } = await supabase.from('estates').select('id, name').order('name');
-
-                if (locs) setLocations(locs);
-                if (types) setLandTypes(types);
-                if (ests) setEstates(ests);
             } catch (err) {
-                console.error("Error loading dropdown data", err);
-            } finally {
-                setOptionsLoading(false);
+                console.error("Error loading user data", err);
             }
         };
         fetchData();
@@ -431,7 +454,73 @@ export default function AddListingPage() {
                         </div>
                     )}
 
-                    {profile && (
+                    {/* Upgrade Prompt for Starter Users at Limit */}
+                    {showUpgradePrompt && (
+                        <div className="mb-6 bg-gradient-to-r from-primary via-primary to-primary/90 rounded-xl text-white overflow-hidden">
+                            <div className="relative p-8">
+                                {/* Background decoration */}
+                                <div className="absolute inset-0 opacity-10">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/2" />
+                                </div>
+
+                                <div className="relative text-center">
+                                    <div className="flex justify-center mb-4">
+                                        <div className="p-3 bg-white/20 rounded-full">
+                                            <Crown className="h-8 w-8" />
+                                        </div>
+                                    </div>
+
+                                    <h2 className="text-2xl font-bold mb-2">
+                                        You've Used Your Free Listing!
+                                    </h2>
+                                    <p className="text-white/90 mb-6 max-w-lg mx-auto">
+                                        Upgrade to Pro to list up to 15 properties, get a verified agent badge,
+                                        and feature your listings on the homepage.
+                                    </p>
+
+                                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                                        <Button
+                                            size="lg"
+                                            className="bg-white text-primary hover:bg-white/90 font-bold shadow-lg"
+                                            asChild
+                                        >
+                                            <Link href="/onboarding/payment">
+                                                <Zap className="h-5 w-5 mr-2" />
+                                                Upgrade to Pro — ₦5,000/mo
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            size="lg"
+                                            variant="outline"
+                                            className="border-white/30 text-white hover:bg-white/10"
+                                            asChild
+                                        >
+                                            <Link href="/agent/dashboard">
+                                                Back to Dashboard
+                                            </Link>
+                                        </Button>
+                                    </div>
+
+                                    <div className="mt-6 grid grid-cols-3 gap-4 text-sm">
+                                        <div className="bg-white/10 rounded-lg p-3">
+                                            <div className="font-bold text-lg">15</div>
+                                            <div className="text-white/70">Active Listings</div>
+                                        </div>
+                                        <div className="bg-white/10 rounded-lg p-3">
+                                            <div className="font-bold text-lg">✓</div>
+                                            <div className="text-white/70">Verified Badge</div>
+                                        </div>
+                                        <div className="bg-white/10 rounded-lg p-3">
+                                            <div className="font-bold text-lg">⚡</div>
+                                            <div className="text-white/70">Feature Listings</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {profile && !showUpgradePrompt && (
                         <div className="mb-6">
                             <ListingQuotaDisplay
                                 activeListingsCount={activeListingsCount}
@@ -443,6 +532,7 @@ export default function AddListingPage() {
                         </div>
                     )}
 
+                    {!showUpgradePrompt && (
                     <form onSubmit={handleSubmit} className="space-y-8">
                         {/* Location & Type */}
                         <div className="space-y-6">
@@ -780,6 +870,7 @@ export default function AddListingPage() {
                             {loading ? "Creating Listing..." : "Post Property"}
                         </Button>
                     </form>
+                    )}
                 </div>
             </div>
         </main>

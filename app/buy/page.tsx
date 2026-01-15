@@ -103,6 +103,14 @@ export default async function BuyPage({
         console.error("Error fetching properties:", error);
     }
 
+    // Fetch related blog posts for internal linking
+    const { data: blogPosts } = await supabase
+        .from('blog_posts')
+        .select('id, title, slug, excerpt, image_url, category')
+        .or('status.eq.published,published.is.true')
+        .order('created_at', { ascending: false })
+        .limit(4);
+
     // Map to property format
     const properties = (data || []).map((p: any) => ({
         id: p.id,
@@ -129,6 +137,7 @@ export default async function BuyPage({
             initialMinSize={minSize}
             initialMaxSize={maxSize}
             initialPaymentPlan={paymentPlan}
+            blogPosts={blogPosts || []}
         />
     );
 }

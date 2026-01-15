@@ -89,12 +89,28 @@ export default function AgentDashboard() {
                 // Fetch user profile for subscription info
                 const { data: profileData } = await supabase
                     .from('profiles')
-                    .select('subscription_tier, subscription_expiry, role')
+                    .select('subscription_tier, subscription_expiry, role, payment_required, email_verified')
                     .eq('id', user.id)
                     .maybeSingle();
 
-                if (isMounted && profileData) {
-                    setProfile(profileData);
+                if (profileData) {
+                    // Freemium model: only check email verification
+                    // Starter users get 1 free listing without payment
+                    if (!profileData.email_verified) {
+                        console.log("Dashboard: Email not verified, redirecting to check-email...");
+                        router.push('/auth/check-email');
+                        return;
+                    }
+
+                    // Set profile - starter tier is allowed (freemium with 1 free listing)
+                    if (isMounted) {
+                        setProfile(profileData);
+                    }
+                } else {
+                    // Profile doesn't exist, redirect to registration
+                    console.log("Dashboard: Profile not found, redirecting to register...");
+                    router.push('/register');
+                    return;
                 }
 
                 const { data, error } = await supabase

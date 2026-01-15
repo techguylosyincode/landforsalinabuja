@@ -15,6 +15,7 @@ interface PropertyProps {
     // Optional agent data for WhatsApp
     agentPhone?: string | null;
     agentVerified?: boolean;
+    agentTier?: string | null;
     // Featured listing data
     is_featured?: boolean;
     featured_until?: string | null;
@@ -68,6 +69,14 @@ export default function PropertyCard({ property }: { property: PropertyProps }) 
                     <div className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center shadow-lg z-10">
                         <Zap className="w-3 h-3 mr-1 fill-white" />
                         FEATURED
+                    </div>
+                )}
+                {/* Basic Listing Badge for starter/free tier agents (only show if not featured and not verified) */}
+                {(property.agentTier === 'starter' || property.agentTier === 'free') &&
+                 !property.agentVerified &&
+                 !(property.is_featured && property.featured_until && new Date(property.featured_until) > new Date()) && (
+                    <div className="absolute bottom-2 left-2 bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded flex items-center">
+                        Basic Listing
                     </div>
                 )}
             </div>

@@ -10,15 +10,15 @@ export type SubscriptionTier = 'starter' | 'free' | 'pro' | 'premium' | 'agency'
 /**
  * Maximum number of active listings allowed per subscription tier
  * -1 indicates unlimited listings
- * 
- * Pricing Strategy (Market Entry - Dec 2024):
- * - Free/Starter: 3 listings (generous to attract agents)
+ *
+ * Freemium Model (Jan 2025):
+ * - Free/Starter: 1 listing (forever, never expires) - hooks users to try the platform
  * - Pro: 15 listings at ₦5,000/mo (undercuts NPC's ₦16k entry)
  * - Agency: Unlimited at ₦15,000/mo (cheaper than PropertyPro's ₦15.9k for 120)
  */
 export const LISTING_LIMITS: Record<SubscriptionTier, number> = {
-  'starter': 3,
-  'free': 3,
+  'starter': 1,
+  'free': 1,
   'pro': 15,
   'premium': 15,
   'agency': -1, // unlimited
