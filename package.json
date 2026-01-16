@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 7777",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 7777",
     "lint": "eslint"
   },
   "dependencies": {
@@ -25,12 +25,13 @@
     "dotenv": "^17.2.3",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.556.0",
-    "next": "16.0.8",
+    "next": "^16.1.2",
     "pg": "^8.16.3",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-hook-form": "^7.68.0",
     "react-paystack": "^6.0.0",
+    "resend": "^6.7.0",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.1.13"
   },
