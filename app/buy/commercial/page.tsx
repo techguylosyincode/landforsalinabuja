@@ -36,6 +36,13 @@ export default async function CommercialBuyPage() {
         slug: p.slug || p.id
     }));
 
+    const { data: blogPosts } = await supabase
+        .from('blog_posts')
+        .select('id, title, slug, excerpt, image_url, category')
+        .or('status.eq.published,published.is.true')
+        .order('created_at', { ascending: false })
+        .limit(4);
+
     return (
         <main>
             {/* SEO Header Section */}
@@ -88,6 +95,7 @@ export default async function CommercialBuyPage() {
                     initialMinSize=""
                     initialMaxSize=""
                     initialPaymentPlan=""
+                    blogPosts={blogPosts || []}
                 />
             </div>
         </main>
