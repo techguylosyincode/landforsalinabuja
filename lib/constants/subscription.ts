@@ -5,22 +5,23 @@
  * Used across the application to maintain consistency in quota enforcement.
  */
 
-export type SubscriptionTier = 'starter' | 'free' | 'pro' | 'premium' | 'agency';
+export type SubscriptionTier = 'starter' | 'free' | 'pro' | 'business' | 'agency';
 
 /**
  * Maximum number of active listings allowed per subscription tier
  * -1 indicates unlimited listings
  *
- * Freemium Model (Jan 2025):
+ * Pricing Model (Jan 2026):
  * - Free/Starter: 1 listing (forever, never expires) - hooks users to try the platform
- * - Pro: 15 listings at ₦5,000/mo (undercuts NPC's ₦16k entry)
- * - Agency: Unlimited at ₦15,000/mo (cheaper than PropertyPro's ₦15.9k for 120)
+ * - Pro: 30 listings at ₦15,000/mo (matches PropertyPro Manager entry price)
+ * - Business: 100 listings at ₦35,000/mo (mid-tier for growing agents)
+ * - Agency: Unlimited at ₦75,000/mo (still 56% cheaper than PropertyPro Platinum)
  */
 export const LISTING_LIMITS: Record<SubscriptionTier, number> = {
   'starter': 1,
   'free': 1,
-  'pro': 15,
-  'premium': 15,
+  'pro': 30,
+  'business': 100,
   'agency': -1, // unlimited
 };
 
@@ -78,7 +79,7 @@ export function formatTierName(tier: string): string {
     'starter': 'Starter Plan',
     'free': 'Free Plan',
     'pro': 'Pro Plan',
-    'premium': 'Premium Plan',
+    'business': 'Business Plan',
     'agency': 'Agency Plan',
   };
   return tierMap[tier] || 'Basic Plan';
@@ -94,7 +95,7 @@ export function getTierIcon(tier: string): string {
     'starter': '🌱',
     'free': '🌱',
     'pro': '⭐',
-    'premium': '⭐',
+    'business': '💼',
     'agency': '🏢',
   };
   return iconMap[tier] || '📋';

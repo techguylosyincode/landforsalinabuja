@@ -20,40 +20,54 @@ const PLANS = [
   {
     id: "pro",
     name: "Pro",
-    price: 5000,
-    period: "month",
-    annually: 50000,
-    features: [
-      "15 Active Listings",
-      "1 Featured Listing",
-      "Verified Badge",
-      "Priority Support",
-      "Analytics Dashboard",
-    ],
-    description: "Best for individual agents",
-  },
-  {
-    id: "agency",
-    name: "Agency",
     price: 15000,
     period: "month",
     annually: 150000,
     features: [
+      "30 Active Listings",
+      "3 Featured Listings",
+      "Verified Agent Badge",
+      "Priority Support",
+    ],
+    description: "Best for individual agents",
+  },
+  {
+    id: "business",
+    name: "Business",
+    price: 35000,
+    period: "month",
+    annually: 350000,
+    features: [
+      "100 Active Listings",
+      "10 Featured Listings",
+      "Verified Agent Badge",
+      "Priority Support",
+      "Analytics Dashboard",
+    ],
+    description: "Best for growing teams",
+    popular: true,
+  },
+  {
+    id: "agency",
+    name: "Agency",
+    price: 75000,
+    period: "month",
+    annually: 750000,
+    features: [
       "Unlimited Listings",
       "Unlimited Featured",
-      "Agency Branding",
-      "Team Management (up to 5 agents)",
-      "Advanced Analytics",
-      "24/7 Priority Support",
+      "Verified Agency Badge",
+      "Dedicated Account Manager",
+      "Team Members (Coming Soon)",
     ],
-    description: "Best for agencies and teams",
+    description: "Best for agencies and developers",
   },
 ];
 
 export default function OnboardingPaymentPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState<"pro" | "agency">("pro");
+  const [selectedPlan, setSelectedPlan] = useState<"pro" | "business" | "agency">("business");
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("monthly");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

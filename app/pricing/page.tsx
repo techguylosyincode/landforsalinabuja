@@ -16,17 +16,22 @@ const PaystackButton = dynamic(() => import("@/components/PaystackButton"), {
 // Get Paystack Public Key from environment variable
 const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
 
-// Pricing configuration (Market Entry Strategy - Dec 2024)
-// Undercuts competitors: NPC Silver is ₦16k, PropertyPro entry is ₦15.9k
+// Pricing configuration (Jan 2026)
+// Competitive with PropertyPro: Manager ₦15.9k, Executive ₦27.9k, Platinum ₦169.9k
 const PRICING = {
     pro: {
-        monthly: 5000,           // ₦5,000/mo - aggressive entry price
-        annual: 50000,           // ₦50,000/yr - 2 months free (5k * 10)
-        listingLimit: 15,
+        monthly: 15000,          // ₦15,000/mo - matches market entry price
+        annual: 150000,          // ₦150,000/yr - 2 months free
+        listingLimit: 30,
+    },
+    business: {
+        monthly: 35000,          // ₦35,000/mo - mid-tier for growing agents
+        annual: 350000,          // ₦350,000/yr - 2 months free
+        listingLimit: 100,
     },
     agency: {
-        monthly: 15000,          // ₦15,000/mo - cheaper than PropertyPro's ₦15.9k
-        annual: 150000,          // ₦150,000/yr - 2 months free (15k * 10)
+        monthly: 75000,          // ₦75,000/mo - still 56% cheaper than PropertyPro Platinum
+        annual: 750000,          // ₦750,000/yr - 2 months free
         listingLimit: -1,        // unlimited
     }
 };
@@ -116,11 +121,11 @@ export default function PricingPage() {
         console.log("Payment closed");
     };
 
-    const getPrice = (tier: 'pro' | 'agency') => {
+    const getPrice = (tier: 'pro' | 'business' | 'agency') => {
         return billingCycle === 'annual' ? PRICING[tier].annual : PRICING[tier].monthly;
     };
 
-    const getSavings = (tier: 'pro' | 'agency') => {
+    const getSavings = (tier: 'pro' | 'business' | 'agency') => {
         const monthlyTotal = PRICING[tier].monthly * 12;
         const annualPrice = PRICING[tier].annual;
         return monthlyTotal - annualPrice;
@@ -163,36 +168,36 @@ export default function PricingPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
                     {/* Starter Plan */}
-                    <div className={`bg-white rounded-2xl shadow-sm border p-8 flex flex-col ${currentTier === 'starter' ? 'ring-2 ring-primary' : ''}`}>
+                    <div className={`bg-white rounded-2xl shadow-sm border p-6 flex flex-col ${currentTier === 'starter' ? 'ring-2 ring-primary' : ''}`}>
                         {currentTier === 'starter' && (
                             <div className="text-xs font-bold text-primary mb-4">CURRENT PLAN</div>
                         )}
-                        <div className="mb-8">
+                        <div className="mb-6">
                             <h3 className="text-lg font-medium text-gray-500 mb-2">Starter</h3>
                             <div className="text-4xl font-bold">Free</div>
-                            <p className="text-gray-500 mt-2">Perfect for getting started.</p>
+                            <p className="text-gray-500 mt-2 text-sm">Try the platform risk-free.</p>
                         </div>
-                        <ul className="space-y-4 mb-8 flex-1">
+                        <ul className="space-y-3 mb-8 flex-1 text-sm">
                             <li className="flex items-center gap-3">
-                                <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                                <span><strong>3</strong> Active Listings</span>
+                                <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                                <span><strong>1</strong> Active Listing</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                                 <span>Basic Search Visibility</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                                 <span>Standard Support</span>
                             </li>
                             <li className="flex items-center gap-3 text-gray-400">
-                                <X className="h-5 w-5 flex-shrink-0" />
+                                <X className="h-4 w-4 flex-shrink-0" />
                                 <span>Featured Listings</span>
                             </li>
                             <li className="flex items-center gap-3 text-gray-400">
-                                <X className="h-5 w-5 flex-shrink-0" />
+                                <X className="h-4 w-4 flex-shrink-0" />
                                 <span>Verified Badge</span>
                             </li>
                         </ul>
@@ -202,50 +207,47 @@ export default function PricingPage() {
                             size="lg"
                             onClick={() => router.push(user ? '/agent/dashboard' : '/register')}
                         >
-                            {user ? (currentTier === 'starter' ? 'Current Plan' : 'Downgrade') : 'Get Started'}
+                            {user ? (currentTier === 'starter' ? 'Current Plan' : 'Downgrade') : 'Get Started Free'}
                         </Button>
                     </div>
 
                     {/* Pro Plan */}
-                    <div className={`bg-white rounded-2xl shadow-lg border-2 border-primary p-8 flex flex-col relative overflow-hidden ${currentTier === 'pro' ? 'ring-2 ring-green-500' : ''}`}>
-                        <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                            MOST POPULAR
-                        </div>
+                    <div className={`bg-white rounded-2xl shadow-sm border p-6 flex flex-col relative ${currentTier === 'pro' ? 'ring-2 ring-green-500' : ''}`}>
                         {currentTier === 'pro' && (
                             <div className="text-xs font-bold text-green-600 mb-4">CURRENT PLAN</div>
                         )}
-                        <div className="mb-8">
+                        <div className="mb-6">
                             <h3 className="text-lg font-medium text-primary mb-2">Pro Agent</h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-bold">₦{getPrice('pro').toLocaleString()}</span>
-                                <span className="text-gray-500">/{billingCycle === 'annual' ? 'year' : 'month'}</span>
+                                <span className="text-3xl font-bold">₦{getPrice('pro').toLocaleString()}</span>
+                                <span className="text-gray-500 text-sm">/{billingCycle === 'annual' ? 'yr' : 'mo'}</span>
                             </div>
                             {billingCycle === 'annual' && (
-                                <p className="text-green-600 text-sm mt-1">
+                                <p className="text-green-600 text-xs mt-1">
                                     Save ₦{getSavings('pro').toLocaleString()}/year
                                 </p>
                             )}
-                            <p className="text-gray-500 mt-2">For serious agents.</p>
+                            <p className="text-gray-500 mt-2 text-sm">For individual agents.</p>
                         </div>
-                        <ul className="space-y-4 mb-8 flex-1">
+                        <ul className="space-y-3 mb-8 flex-1 text-sm">
                             <li className="flex items-center gap-3">
-                                <Check className="h-5 w-5 text-primary flex-shrink-0" />
-                                <span><strong>15</strong> Active Listings</span>
+                                <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                                <span><strong>30</strong> Active Listings</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Zap className="h-5 w-5 text-yellow-500 flex-shrink-0" />
-                                <span><strong>Featured</strong> Listings (Top of Search)</span>
+                                <Zap className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+                                <span><strong>3</strong> Featured Listings</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Shield className="h-5 w-5 text-primary flex-shrink-0" />
+                                <Shield className="h-4 w-4 text-primary flex-shrink-0" />
                                 <span>"Verified Agent" Badge</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                                <Check className="h-4 w-4 text-primary flex-shrink-0" />
                                 <span>Priority Support</span>
                             </li>
                             <li className="flex items-center gap-3 text-gray-400">
-                                <X className="h-5 w-5 flex-shrink-0" />
+                                <X className="h-4 w-4 flex-shrink-0" />
                                 <span>Team Members</span>
                             </li>
                         </ul>
@@ -262,52 +264,114 @@ export default function PricingPage() {
                                 onSuccess={(ref) => handleSuccess(ref, 'pro')}
                                 onClose={handleClose}
                                 user={user}
-                                label={currentTier === 'agency' ? 'Downgrade to Pro' : 'Upgrade to Pro'}
+                                label="Upgrade to Pro"
+                                site="land"
+                            />
+                        )}
+                    </div>
+
+                    {/* Business Plan */}
+                    <div className={`bg-white rounded-2xl shadow-lg border-2 border-primary p-6 flex flex-col relative overflow-hidden ${currentTier === 'business' ? 'ring-2 ring-green-500' : ''}`}>
+                        <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                            BEST VALUE
+                        </div>
+                        {currentTier === 'business' && (
+                            <div className="text-xs font-bold text-green-600 mb-4">CURRENT PLAN</div>
+                        )}
+                        <div className="mb-6">
+                            <h3 className="text-lg font-medium text-primary mb-2">Business</h3>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-3xl font-bold">₦{getPrice('business').toLocaleString()}</span>
+                                <span className="text-gray-500 text-sm">/{billingCycle === 'annual' ? 'yr' : 'mo'}</span>
+                            </div>
+                            {billingCycle === 'annual' && (
+                                <p className="text-green-600 text-xs mt-1">
+                                    Save ₦{getSavings('business').toLocaleString()}/year
+                                </p>
+                            )}
+                            <p className="text-gray-500 mt-2 text-sm">For growing teams.</p>
+                        </div>
+                        <ul className="space-y-3 mb-8 flex-1 text-sm">
+                            <li className="flex items-center gap-3">
+                                <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                                <span><strong>100</strong> Active Listings</span>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <Zap className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+                                <span><strong>10</strong> Featured Listings</span>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <Shield className="h-4 w-4 text-primary flex-shrink-0" />
+                                <span>"Verified Agent" Badge</span>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                                <span>Priority Support</span>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                                <span>Analytics Dashboard</span>
+                            </li>
+                        </ul>
+
+                        {currentTier === 'business' ? (
+                            <Button variant="outline" className="w-full" size="lg" disabled>
+                                Current Plan
+                            </Button>
+                        ) : (
+                            <PaystackButton
+                                amount={getPrice('business')}
+                                email={user?.email || ""}
+                                publicKey={PAYSTACK_PUBLIC_KEY}
+                                onSuccess={(ref) => handleSuccess(ref, 'business')}
+                                onClose={handleClose}
+                                user={user}
+                                label="Upgrade to Business"
                                 site="land"
                             />
                         )}
                     </div>
 
                     {/* Agency Plan */}
-                    <div className={`bg-white rounded-2xl shadow-sm border p-8 flex flex-col relative ${currentTier === 'agency' ? 'ring-2 ring-green-500' : ''}`}>
+                    <div className={`bg-white rounded-2xl shadow-sm border p-6 flex flex-col relative ${currentTier === 'agency' ? 'ring-2 ring-green-500' : ''}`}>
                         {currentTier === 'agency' && (
                             <div className="text-xs font-bold text-green-600 mb-4">CURRENT PLAN</div>
                         )}
-                        <div className="mb-8">
+                        <div className="mb-6">
                             <h3 className="text-lg font-medium text-gray-700 mb-2 flex items-center gap-2">
                                 <Building2 className="h-5 w-5" />
                                 Agency
                             </h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-bold">₦{getPrice('agency').toLocaleString()}</span>
-                                <span className="text-gray-500">/{billingCycle === 'annual' ? 'year' : 'month'}</span>
+                                <span className="text-3xl font-bold">₦{getPrice('agency').toLocaleString()}</span>
+                                <span className="text-gray-500 text-sm">/{billingCycle === 'annual' ? 'yr' : 'mo'}</span>
                             </div>
                             {billingCycle === 'annual' && (
-                                <p className="text-green-600 text-sm mt-1">
+                                <p className="text-green-600 text-xs mt-1">
                                     Save ₦{getSavings('agency').toLocaleString()}/year
                                 </p>
                             )}
-                            <p className="text-gray-500 mt-2">For agencies & developers.</p>
+                            <p className="text-gray-500 mt-2 text-sm">For agencies & developers.</p>
                         </div>
-                        <ul className="space-y-4 mb-8 flex-1">
+                        <ul className="space-y-3 mb-8 flex-1 text-sm">
                             <li className="flex items-center gap-3">
-                                <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                                 <span><strong>Unlimited</strong> Listings</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Zap className="h-5 w-5 text-yellow-500 flex-shrink-0" />
-                                <span><strong>Featured</strong> Listings (Top of Search)</span>
+                                <Zap className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+                                <span><strong>Unlimited</strong> Featured Listings</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Shield className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                <Shield className="h-4 w-4 text-green-500 flex-shrink-0" />
                                 <span>"Verified Agency" Badge</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                                <span>Priority Support</span>
+                                <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                                <span>Dedicated Account Manager</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <Users className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                <Users className="h-4 w-4 text-green-500 flex-shrink-0" />
                                 <span>Team Members (Coming Soon)</span>
                             </li>
                         </ul>
